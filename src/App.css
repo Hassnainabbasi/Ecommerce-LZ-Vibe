@@ -1,0 +1,25 @@
+.container{
+    max-width: 80%;
+    margin: 0 auto;
+}
+.text-blue{
+    color: #2563eb;
+}
+.bg-blue{
+    background-color: #2563eb;
+}
+.text-blue-dark{
+    color: #1d4ed8;
+}
+.bg-blue-dark{
+    background-color: #1d4ed8;
+}
+
+button{
+    cursor: pointer;
+}
+@media (max-width: 600px) {
+    .container{
+        max-width: 95%;
+    }
+}

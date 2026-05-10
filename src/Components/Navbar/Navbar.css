@@ -1,0 +1,144 @@
+#header {
+    background: rgba(255, 255, 255, 0.92);
+    color: #0f172a;
+    position: sticky;
+    top: 0;
+    border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+#header nav a {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+#header nav a:hover {
+    color: #2563eb;
+}
+
+#header nav a.active {
+    color: #2563eb;
+}
+
+#header .buttons-container a:hover {
+    color: #2563eb;
+}
+
+#header .buttons-container a.active {
+    color: #2563eb;
+}
+
+@media (max-width: 1366px) {
+    #header > div.container{
+        height: 75px;
+    }
+    #header .logo img{
+        width: 85px;
+    }
+    #header .logo h1{
+        font-size: 16px;
+    }
+    #header nav a{
+        font-size: 13px;
+    }
+    #header .buttons-container a{
+        font-size: 13px;
+    }
+    #header .buttons-container  i{
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 990px) {
+    #header nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 50;
+        padding-top: 10vw;
+        width: 0;
+        overflow: hidden;
+        height: 100vh;
+        background-color: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-left: 1px solid #e2e8f0;
+        box-shadow: -4px 0 24px rgba(15, 23, 42, 0.08);
+            /* transform: translateX(200px); */
+        transition: width 0.4s ease;
+    }
+
+    #header nav.showMenu {
+        /* transform: translateX(0); */
+        width: 200px;
+    }
+
+    #header nav ul {
+        flex-direction: column;
+    }
+
+    #header nav button {
+        display: inline-block;
+    }
+
+    #header .buttons-container button.menu-btn {
+        display: inline-block;
+    }
+}
+
+@media (max-width: 750px) {
+    #header nav a {
+        font-size: 14px;
+    }
+    #header nav li.add-me {
+        display: block;
+    }
+
+    #header .buttons-container a.remove-me {
+        display: none;
+    }
+    .cart-count{
+        font-size: 11px;
+        width: 15px;
+        height: 15px;
+    }
+}
+
+@media (max-width: 500px) {
+    #header .logo img {
+        width: 100px;
+    }
+
+    #header>.container {
+        gap: 10px;
+    }
+    #header .logo img{
+        width: 80px;
+    }
+    #header .logo h1{
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 440px) {
+    #header .logo h1{
+        font-size: 18px;
+    }
+    #header .buttons-container {
+        gap: 10px;
+    }
+
+    #header .cart-btn {
+        background-color: transparent;
+        padding: 0;
+    }
+
+    #header .cart-btn i {
+        font-size: 20px;
+        margin-left: 0;
+    }
+
+    #header .cart-btn span {
+        display: none;
+    }
+}
