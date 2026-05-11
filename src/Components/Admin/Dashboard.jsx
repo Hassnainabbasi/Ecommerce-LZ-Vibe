@@ -35,8 +35,11 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="p-6 text-white text-center">
-        Loading dashboard...
+      <div className="grid min-h-[70vh] place-items-center p-6 text-center">
+        <div className="rounded-3xl border border-red-100 bg-white p-8 shadow-xl">
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-red-100 border-t-red-600" />
+          <p className="text-lg font-black text-slate-900">Loading dashboard...</p>
+        </div>
       </div>
     );
   }
@@ -56,14 +59,20 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="p-6 text-gray-800">
-      <h1 className="text-3xl font-bold mb-6">Dashboard Overview</h1>
+    <div className="p-4 lg:p-6 text-gray-800">
+      <div className="mb-6 overflow-hidden rounded-[2rem] bg-gradient-to-r from-slate-950 via-red-900 to-red-600 p-6 text-white shadow-2xl">
+        <p className="text-xs font-black uppercase tracking-[0.24em] text-yellow-300">Admin dashboard</p>
+        <h1 className="mt-2 text-3xl font-black tracking-tight lg:text-4xl">Dashboard Overview</h1>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-white/70">
+          Track catalogue, users, orders, and real offer performance from one premium control panel.
+        </p>
+      </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 mb-6 lg:mb-8">
-        <div className="bg-blue-500 rounded-lg p-4 lg:p-6 text-black shadow-lg hover:shadow-xl transition-shadow">
+        <div className="rounded-3xl border border-slate-200 bg-white p-4 lg:p-6 text-slate-950 shadow-sm hover:-translate-y-1 hover:shadow-xl transition-all">
           <div className="flex items-center">
-            <div className="bg-blue-600 p-2 lg:p-3 rounded-lg mr-3 lg:mr-4">
+            <div className="bg-red-600 p-3 rounded-2xl mr-3 lg:mr-4 shadow-lg shadow-red-600/20">
               <i className="fas fa-users text-white text-xl lg:text-2xl"></i>
             </div>
             <div>
@@ -75,9 +84,9 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-green-400 rounded-lg p-4 lg:p-6 text-black shadow-lg hover:shadow-xl transition-shadow">
+        <div className="rounded-3xl border border-slate-200 bg-white p-4 lg:p-6 text-slate-950 shadow-sm hover:-translate-y-1 hover:shadow-xl transition-all">
           <div className="flex items-center">
-            <div className="bg-green-600 p-2 lg:p-3 rounded-lg mr-3 lg:mr-4">
+            <div className="bg-yellow-400 p-3 rounded-2xl mr-3 lg:mr-4 shadow-lg shadow-yellow-400/20">
               <i className="fas fa-shopping-cart text-white text-xl lg:text-2xl"></i>
             </div>
             <div>
@@ -89,9 +98,9 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-purple-400 rounded-lg p-4 lg:p-6 text-black shadow-lg hover:shadow-xl transition-shadow">
+        <div className="rounded-3xl border border-slate-200 bg-white p-4 lg:p-6 text-slate-950 shadow-sm hover:-translate-y-1 hover:shadow-xl transition-all">
           <div className="flex items-center">
-            <div className="bg-purple-600 p-2 lg:p-3 rounded-lg mr-3 lg:mr-4">
+            <div className="bg-slate-950 p-3 rounded-2xl mr-3 lg:mr-4 shadow-lg shadow-slate-950/20">
               <i className="fas fa-box text-white text-xl lg:text-2xl"></i>
             </div>
             <div>
@@ -105,11 +114,19 @@ export default function Dashboard() {
       </div>
 
       {/* Orders Table */}
-      <h2 className="text-2xl font-bold mb-4">Recent Orders</h2>
-      <div className="bg-white border-2 border-slate-200 p-4 rounded-lg shadow-lg overflow-x-auto">
+      <div className="mb-4 flex items-end justify-between gap-3">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-red-600">Recent activity</p>
+          <h2 className="mt-1 text-2xl font-black text-slate-950">Recent Orders</h2>
+        </div>
+        <span className="rounded-full bg-red-50 px-4 py-2 text-sm font-black text-red-700">
+          {orders.length} total
+        </span>
+      </div>
+      <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
         <table className="table-auto w-full text-sm">
           <thead>
-            <tr className="bg-slate-100 text-gray-800">
+            <tr className="bg-slate-950 text-white">
               <th className="px-4 py-2 text-left">Customer</th>
               <th className="px-4 py-2 text-left">Email</th>
               <th className="px-4 py-2 text-left">Phone</th>
@@ -122,7 +139,7 @@ export default function Dashboard() {
           </thead>
           <tbody>
             {currentOrders.length > 0 ? currentOrders.map((order) => (
-              <tr key={order._id} className="border-b border-slate-200 hover:bg-slate-50">
+              <tr key={order._id} className="border-b border-slate-100 hover:bg-red-50/40">
                 <td className="px-4 py-2">{order.name}</td>
                 <td className="px-4 py-2">{order.email}</td>
                 <td className="px-4 py-2">{order.phone}</td>
@@ -155,7 +172,7 @@ export default function Dashboard() {
           <button
             onClick={goToPreviousPage}
             disabled={currentPage === 1}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-slate-950 text-white rounded-xl hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Previous
           </button>
@@ -163,7 +180,7 @@ export default function Dashboard() {
           <button
             onClick={goToNextPage}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-slate-950 text-white rounded-xl hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Next
           </button>

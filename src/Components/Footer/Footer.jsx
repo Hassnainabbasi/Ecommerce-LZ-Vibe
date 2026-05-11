@@ -32,11 +32,11 @@ function Footer() {
             </span>
             <span>
               <span className='block text-xl font-black tracking-tight'>LZ Vibe</span>
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">Daily deals</span>
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">Online store</span>
             </span>
           </Link>
           <p className="mt-5 max-w-sm text-sm leading-7 text-slate-300">
-            Bizmart inspired online shopping UI for bold offers, fast categories,
+            Bizmart inspired online shopping UI for fast categories,
             and a clean product buying experience.
           </p>
         </div>

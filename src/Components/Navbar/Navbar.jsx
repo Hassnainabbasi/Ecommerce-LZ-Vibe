@@ -22,7 +22,7 @@ function Navbar({ setOpenSearch }) {
     <header id='header' className='sticky top-0 z-[1000]'>
       <div className="nav-offer-bar">
         <div className="container flex flex-wrap items-center justify-between gap-2 py-2 text-xs font-semibold">
-          <span>Wholesale prices rozana · New deals every week</span>
+          <span>Fast delivery · Secure checkout · Customer support</span>
           <span className="hidden sm:inline">Need help? WhatsApp support available</span>
         </div>
       </div>
@@ -35,7 +35,7 @@ function Navbar({ setOpenSearch }) {
             </span>
             <span className="hidden leading-tight sm:block">
               <span className="block text-lg font-black tracking-tight text-slate-950">LZ Vibe</span>
-              <span className="block text-xs font-semibold uppercase tracking-[0.2em] text-red-600">Daily deals</span>
+              <span className="block text-xs font-semibold uppercase tracking-[0.2em] text-red-600">Online store</span>
             </span>
           </Link>
 

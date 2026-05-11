@@ -125,7 +125,7 @@ function Products() {
               Products people are buying
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-slate-500">
-              Category-wise product sections with value-store style cards, offer labels, and fast checkout actions.
+              Category-wise product sections with clean product cards and fast checkout actions.
             </p>
           </div>
           <span className="inline-flex w-fit rounded-full bg-red-50 px-4 py-2 text-sm font-black text-red-700">

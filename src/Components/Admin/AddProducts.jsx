@@ -36,6 +36,12 @@ function rowToBulkProduct(row) {
   const flavorRaw = findCellRaw(row, ["flavor", "flavours", "flavors"]);
   const imageRaw = findCellRaw(row, ["image", "image url", "imageurl"]);
   const productIdRaw = findCellRaw(row, ["productid", "product id", "sku"]);
+  const compareAtPriceRaw = findCellRaw(row, ["compareatprice", "compare at price", "oldprice", "mrp"]);
+  const discountPercentRaw = findCellRaw(row, ["discountpercent", "discount percent", "discount"]);
+  const isWeeklyOfferRaw = findCellRaw(row, ["isweeklyoffer", "weekly offer", "weeklyoffer"]);
+  const offerLabelRaw = findCellRaw(row, ["offerlabel", "offer label", "badge"]);
+  const offerEndsAtRaw = findCellRaw(row, ["offerendsat", "offer ends at", "valid till"]);
+  const isFeaturedRaw = findCellRaw(row, ["isfeatured", "featured"]);
 
   const name = nameRaw != null ? String(nameRaw).trim() : "";
   const category = categoryRaw != null ? String(categoryRaw).trim() : "";
@@ -54,11 +60,22 @@ function rowToBulkProduct(row) {
   }
   const image = imageRaw != null ? String(imageRaw).trim() : "";
   const productId = productIdRaw != null ? String(productIdRaw).trim() : "";
+  const compareAtPrice = parseFloat(String(compareAtPriceRaw ?? "").replace(/,/g, ""));
+  const discountPercent = parseFloat(String(discountPercentRaw ?? "").replace(/,/g, ""));
+  const isTruthy = (value) => ["true", "1", "yes", "y"].includes(String(value ?? "").trim().toLowerCase());
+  const offerLabel = offerLabelRaw != null ? String(offerLabelRaw).trim() : "";
+  const offerEndsAt = offerEndsAtRaw != null ? String(offerEndsAtRaw).trim() : "";
 
   if (!name || !category || !Number.isFinite(price) || price <= 0) return null;
   const p = { name, category, price, weight, flavor };
   if (image) p.image = image;
   if (productId) p.productId = productId;
+  if (Number.isFinite(compareAtPrice) && compareAtPrice > 0) p.compareAtPrice = compareAtPrice;
+  if (Number.isFinite(discountPercent) && discountPercent > 0) p.discountPercent = discountPercent;
+  if (isWeeklyOfferRaw != null) p.isWeeklyOffer = isTruthy(isWeeklyOfferRaw);
+  if (offerLabel) p.offerLabel = offerLabel;
+  if (offerEndsAt) p.offerEndsAt = offerEndsAt;
+  if (isFeaturedRaw != null) p.isFeatured = isTruthy(isFeaturedRaw);
   return p;
 }
 
@@ -70,6 +87,12 @@ export default function AddProducts() {
     price: "",
     weight: "",
     flavor: "",
+    compareAtPrice: "",
+    discountPercent: "",
+    isWeeklyOffer: false,
+    offerLabel: "",
+    offerEndsAt: "",
+    isFeatured: false,
     image: null,
   });
   const [loading, setLoading] = useState(false); // ✅ ADD LOADING STATE
@@ -147,6 +170,8 @@ export default function AddProducts() {
   const handleChange = (e) => {
     if (e.target.name === "image") {
       setFormData({ ...formData, image: e.target.files[0] });
+    } else if (e.target.type === "checkbox") {
+      setFormData({ ...formData, [e.target.name]: e.target.checked });
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
@@ -175,8 +200,14 @@ export default function AddProducts() {
       data.append("name", formData.name);
       data.append("category", formData.category);
       data.append("price", formData.price);
-      data.append("weight", formData.weight || "");
-      data.append("flavor", formData.flavor || "");
+      // data.append("weight", formData.weight || "");
+      // data.append("flavor", formData.flavor || "");
+      data.append("compareAtPrice", formData.compareAtPrice || "");
+      data.append("discountPercent", formData.discountPercent || "");
+      data.append("isWeeklyOffer", String(formData.isWeeklyOffer));
+      data.append("offerLabel", formData.offerLabel || "");
+      data.append("offerEndsAt", formData.offerEndsAt || "");
+      data.append("isFeatured", String(formData.isFeatured));
       if (formData.image) {
         data.append("image", formData.image);
       }
@@ -210,6 +241,12 @@ export default function AddProducts() {
         price: "",
         weight: "",
         flavor: "",
+        compareAtPrice: "",
+        discountPercent: "",
+        isWeeklyOffer: false,
+        offerLabel: "",
+        offerEndsAt: "",
+        isFeatured: false,
         image: null,
       });
       
@@ -227,13 +264,32 @@ export default function AddProducts() {
   };
 
   const downloadProductsBulkTemplate = () => {
-    const header = ["name", "category", "price", "weight", "flavor", "image"];
+    const header = [
+      "name",
+      "category",
+      "price",
+      "compareAtPrice",
+      "discountPercent",
+      "isWeeklyOffer",
+      "offerLabel",
+      "offerEndsAt",
+      "isFeatured",
+      // "weight",
+      // "flavor",
+      "image",
+    ];
     const example = [
       "Whey Protein 2kg",
       "protein",
       5499,
-      "2 kg",
-      "chocolate, vanilla",
+      6999,
+      21,
+      "yes",
+      "Weekly Offer",
+      "2026-06-01",
+      "yes",
+      // "2 kg",
+      // "chocolate, vanilla",
       "",
     ];
     const ws = XLSX.utils.aoa_to_sheet([header, example]);
@@ -241,6 +297,12 @@ export default function AddProducts() {
       { wch: 22 },
       { wch: 14 },
       { wch: 10 },
+      { wch: 16 },
+      { wch: 16 },
+      { wch: 14 },
+      { wch: 18 },
+      { wch: 14 },
+      { wch: 12 },
       { wch: 10 },
       { wch: 22 },
       { wch: 28 },
@@ -358,10 +420,16 @@ export default function AddProducts() {
 
   return (
     <div className="p-4 lg:p-6">
-      <h1 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-4 lg:mb-6">
-        Add New Product
-      </h1>
-      <div className="bg-white border-2 border-slate-200 rounded-lg p-4 lg:p-6 text-gray-800 shadow-lg max-w-2xl mx-auto">
+      <div className="mb-6 rounded-[2rem] bg-gradient-to-r from-slate-950 via-red-900 to-red-600 p-6 text-white shadow-2xl">
+        <p className="text-xs font-black uppercase tracking-[0.24em] text-yellow-300">Catalogue control</p>
+        <h1 className="mt-2 text-3xl lg:text-4xl font-black tracking-tight">
+          Add New Product
+        </h1>
+        <p className="mt-2 max-w-2xl text-sm text-white/70">
+          Add product data, real offers, weekly deal flags, and bulk imports from one place.
+        </p>
+      </div>
+      <div className="bg-white border border-slate-200 rounded-[2rem] p-4 lg:p-6 text-gray-800 shadow-sm max-w-3xl mx-auto">
         <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Product Name */}
           <div>
@@ -394,7 +462,7 @@ export default function AddProducts() {
                 value={formData.category}
                 onChange={handleChange}
                 required
-                className="w-full px-3 lg:px-4 py-2 text-sm lg:text-base bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-gray-800"
+                className="w-full px-3 lg:px-4 py-2 text-sm lg:text-base bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-red-500 text-gray-800"
               >
                 <option value="">Select Category</option>
                 {categories.length > 0 ? (
@@ -439,7 +507,7 @@ export default function AddProducts() {
                 required
                 min="0"
                 step="0.01"
-                className="w-full px-3 lg:px-4 py-2 text-sm lg:text-base bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-gray-800"
+                className="w-full px-3 lg:px-4 py-2 text-sm lg:text-base bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-red-500 text-gray-800"
                 placeholder="Enter price"
               />
             </div>
@@ -452,7 +520,7 @@ export default function AddProducts() {
                 name="weight"
                 value={formData.weight}
                 onChange={handleChange}
-                className="w-full px-3 lg:px-4 py-2 text-sm lg:text-base bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-gray-800"
+                className="w-full px-3 lg:px-4 py-2 text-sm lg:text-base bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-red-500 text-gray-800"
                 placeholder="e.g., 2kg, 500g"
               />
             </div> */}
@@ -473,6 +541,103 @@ export default function AddProducts() {
             />
           </div> */}
 
+          {/* Real Offer / Discount Controls */}
+          <div className="rounded-2xl border border-red-100 bg-gradient-to-br from-red-50 via-white to-yellow-50 p-4">
+            <div className="mb-4">
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-red-600">
+                Real storefront offer
+              </p>
+              <h2 className="mt-1 text-lg font-black text-slate-950">
+                Deal, discount and featured settings
+              </h2>
+              <p className="mt-1 text-sm text-slate-600">
+                Ye fields backend product mein save hon to frontend cards aur hero par real offers show honge.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Compare at / old price
+                </label>
+                <input
+                  type="number"
+                  name="compareAtPrice"
+                  value={formData.compareAtPrice}
+                  onChange={handleChange}
+                  min="0"
+                  step="0.01"
+                  className="w-full px-3 lg:px-4 py-2 text-sm lg:text-base bg-white border border-red-100 rounded-md focus:outline-none focus:border-red-500 text-gray-800"
+                  placeholder="e.g., 6999"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Discount %
+                </label>
+                <input
+                  type="number"
+                  name="discountPercent"
+                  value={formData.discountPercent}
+                  onChange={handleChange}
+                  min="0"
+                  max="100"
+                  step="1"
+                  className="w-full px-3 lg:px-4 py-2 text-sm lg:text-base bg-white border border-red-100 rounded-md focus:outline-none focus:border-red-500 text-gray-800"
+                  placeholder="e.g., 20"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Offer label
+                </label>
+                <input
+                  type="text"
+                  name="offerLabel"
+                  value={formData.offerLabel}
+                  onChange={handleChange}
+                  className="w-full px-3 lg:px-4 py-2 text-sm lg:text-base bg-white border border-red-100 rounded-md focus:outline-none focus:border-red-500 text-gray-800"
+                  placeholder="Weekly Offer / Mega Deal"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Offer ends at
+                </label>
+                <input
+                  type="date"
+                  name="offerEndsAt"
+                  value={formData.offerEndsAt}
+                  onChange={handleChange}
+                  className="w-full px-3 lg:px-4 py-2 text-sm lg:text-base bg-white border border-red-100 rounded-md focus:outline-none focus:border-red-500 text-gray-800"
+                />
+              </div>
+            </div>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <label className="flex items-center gap-3 rounded-xl border border-red-100 bg-white px-4 py-3 text-sm font-bold text-slate-700">
+                <input
+                  type="checkbox"
+                  name="isWeeklyOffer"
+                  checked={formData.isWeeklyOffer}
+                  onChange={handleChange}
+                  className="h-4 w-4 accent-red-600"
+                />
+                Show in weekly offers
+              </label>
+              <label className="flex items-center gap-3 rounded-xl border border-red-100 bg-white px-4 py-3 text-sm font-bold text-slate-700">
+                <input
+                  type="checkbox"
+                  name="isFeatured"
+                  checked={formData.isFeatured}
+                  onChange={handleChange}
+                  className="h-4 w-4 accent-red-600"
+                />
+                Feature on homepage
+              </label>
+            </div>
+          </div>
+
           {/* Image */}
           <div>
             <label className="block text-sm lg:text-base font-medium mb-2">
@@ -483,7 +648,7 @@ export default function AddProducts() {
               name="image"
               onChange={handleChange}
               accept="image/jpeg,image/jpg,image/png,image/webp"
-              className="w-full px-3 lg:px-4 py-2 text-sm cursor-pointer lg:text-base bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-gray-800"
+              className="w-full px-3 lg:px-4 py-2 text-sm cursor-pointer lg:text-base bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-red-500 text-gray-800"
             />
             {formData.image && (
               <div className="mt-3">
@@ -500,14 +665,14 @@ export default function AddProducts() {
           <button
             type="submit"
             disabled={loading || bulkImporting}
-            className="w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-800 transition-colors text-sm lg:text-base disabled:bg-gray-600 disabled:cursor-not-allowed"
+            className="w-full bg-slate-950 text-white py-3 rounded-full font-black hover:bg-red-700 transition-colors text-sm lg:text-base disabled:bg-gray-600 disabled:cursor-not-allowed"
           >
             {loading ? "Adding Product..." : "Add Product"}
           </button>
         </form>
       </div>
 
-      <div className="mt-8 bg-white border-2 border-slate-200 rounded-lg p-4 lg:p-6 text-gray-800 shadow-lg max-w-2xl mx-auto">
+      <div className="mt-8 bg-white border border-slate-200 rounded-[2rem] p-4 lg:p-6 text-gray-800 shadow-sm max-w-3xl mx-auto">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-4">
           {/* <div>
             <h2 className="text-lg font-semibold text-gray-900">Bulk import products</h2>

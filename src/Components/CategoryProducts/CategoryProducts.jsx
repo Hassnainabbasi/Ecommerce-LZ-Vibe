@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, BadgePercent } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import ProductCard from '../ProductCard/ProductCard';
 
 function CategoryProducts({ product, catId }) {
@@ -20,22 +20,21 @@ function CategoryProducts({ product, catId }) {
         >
             <div className="container mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <p className="inline-flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-yellow-800">
-                        <BadgePercent className="h-4 w-4" aria-hidden />
-                        Weekly offer
+                    <p className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-slate-700">
+                        Category
                     </p>
                     <h2 className='mt-3 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl'>
                         {capitalizeCategory(product?.category)}
                     </h2>
                     <p className="mt-2 text-sm font-medium text-slate-500">
-                        Hot picks with clear prices and quick add-to-cart.
+                        Browse products with clear prices and quick add-to-cart.
                     </p>
                 </div>
                 <a
                     href="#products"
                     className="inline-flex w-fit items-center gap-2 rounded-full bg-slate-950 px-4 py-2 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-red-700"
                 >
-                    More deals
+                    View products
                     <ArrowRight className="h-4 w-4" aria-hidden />
                 </a>
             </div>

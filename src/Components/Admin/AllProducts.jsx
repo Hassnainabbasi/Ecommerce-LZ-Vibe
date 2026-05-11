@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-const backendApi = import.meta.env.VITE_API_BASE
 
 import {
   Dialog,
@@ -15,6 +14,7 @@ import { Button } from "@/Components/ui/button";
 import { toast } from "react-hot-toast";
 
 import getImageUrl from "../../utils/imageHelper";
+import { getProductOffer } from "../../utils/offerHelpers";
 export default function AllProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,6 +28,14 @@ export default function AllProducts() {
     price: "",
     category: "",
     image: "",
+    flavor: "",
+    weight: "",
+    compareAtPrice: "",
+    discountPercent: "",
+    isWeeklyOffer: false,
+    offerLabel: "",
+    offerEndsAt: "",
+    isFeatured: false,
     imageFile: null,
   });
 
@@ -63,8 +71,14 @@ export default function AllProducts() {
       name: product.name,
       price: product.price,
       category: product.category,
-        flavor: product.flavor || "",
+      flavor: Array.isArray(product.flavor) ? product.flavor.join(", ") : product.flavor || "",
       weight: product.weight || "",
+      compareAtPrice: product.compareAtPrice || "",
+      discountPercent: product.discountPercent || "",
+      isWeeklyOffer: Boolean(product.isWeeklyOffer),
+      offerLabel: product.offerLabel || "",
+      offerEndsAt: product.offerEndsAt ? String(product.offerEndsAt).slice(0, 10) : "",
+      isFeatured: Boolean(product.isFeatured),
       image: product.image || "",
       imageFile: null,
     });
@@ -79,6 +93,12 @@ export default function AllProducts() {
       formData.append("category", currentProduct.category);
        formData.append("flavor", currentProduct.flavor);
        formData.append("weight", currentProduct.weight);
+      formData.append("compareAtPrice", currentProduct.compareAtPrice || "");
+      formData.append("discountPercent", currentProduct.discountPercent || "");
+      formData.append("isWeeklyOffer", String(currentProduct.isWeeklyOffer));
+      formData.append("offerLabel", currentProduct.offerLabel || "");
+      formData.append("offerEndsAt", currentProduct.offerEndsAt || "");
+      formData.append("isFeatured", String(currentProduct.isFeatured));
       if (currentProduct.imageFile) formData.append("image", currentProduct.imageFile);
 
       const res = await fetch(`${API_BASE}/products/${currentProduct._id}`, {
@@ -134,49 +154,76 @@ export default function AllProducts() {
   return (
     <div className="p-4 lg:p-6">
       {/* Header & Search */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 lg:mb-6 gap-4">
-        <h1 className="text-2xl lg:text-3xl font-bold text-gray-800">All Products</h1>
-        <div className="bg-white border-2 border-slate-200 rounded-[15px] px-10 relative w-full sm:w-64">
+      <div className="mb-6 rounded-[2rem] bg-gradient-to-r from-slate-950 via-red-900 to-red-600 p-6 text-white shadow-2xl">
+        <p className="text-xs font-black uppercase tracking-[0.24em] text-yellow-300">Offer manager</p>
+        <div className="mt-2 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+          <div>
+            <h1 className="text-3xl lg:text-4xl font-black tracking-tight">All Products</h1>
+            <p className="mt-2 max-w-2xl text-sm text-white/70">
+              Edit prices, real discount badges, weekly offers, featured status, and catalogue data.
+            </p>
+          </div>
+        <div className="bg-white/95 border border-white/20 rounded-full px-10 relative w-full sm:w-72">
           <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
           <input
             type="text"
             placeholder="Search by name"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-4 py-2 rounded-lg w-full text-gray-800 focus:outline-none "
+            className="pl-4 py-2 rounded-full w-full text-gray-800 focus:outline-none "
           />
+        </div>
         </div>
       </div>
 
       {/* Products Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
         {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
-            <div key={product._id} className="bg-white border-2 border-slate-200 rounded-lg p-4 text-gray-800 shadow-lg hover:shadow-xl transition-shadow">
-              <img
-                src={getImageUrl(product.image)}
-                alt={product.name}
-                className="mx-auto h-40 lg:h-48 object-cover rounded-md mb-3 lg:mb-4"
-              />
-              <h3 className="text-lg lg:text-xl font-bold mb-2">{product.name}</h3>
-              <p className="text-gray-600 text-sm lg:text-base mb-2">Category: {product.category}</p>
-              <p className="text-blue-600 font-bold text-base lg:text-lg mb-3">Rs {product.price}</p>
-              <div className="flex flex-col sm:flex-row gap-2">
-                <Button
-                  onClick={() => openEditModal(product)}
-                  className="bg-blue-500 hover:bg-blue-800 text-white flex-1"
-                >
-                  Edit
-                </Button>
-                <Button
-                  onClick={() => handleDelete(product._id)}
-                  className="bg-red-400 hover:bg-red-700 text-white flex-1"
-                >
-                  Delete
-                </Button>
+          filteredProducts.map((product) => {
+            const offer = getProductOffer(product);
+            return (
+              <div key={product._id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white text-gray-800 shadow-sm transition hover:-translate-y-1 hover:border-red-200 hover:shadow-xl">
+                <div className="relative bg-slate-100">
+                  {offer.hasOffer && (
+                    <span className="absolute left-3 top-3 rounded-full bg-red-600 px-3 py-1 text-xs font-black uppercase tracking-wide text-white">
+                      {offer.discountPercent ? `${offer.discountPercent}% OFF` : offer.label}
+                    </span>
+                  )}
+                  <img
+                    src={getImageUrl(product.image)}
+                    alt={product.name}
+                    className="mx-auto h-44 w-full object-cover"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="line-clamp-2 min-h-[56px] text-lg font-black text-slate-950">{product.name}</h3>
+                  <p className="mt-2 text-sm font-semibold text-gray-500">Category: {product.category}</p>
+                  <div className="my-3 flex flex-wrap items-baseline gap-2">
+                    <p className="text-xl font-black text-red-600">Rs {Number(product.price || 0).toLocaleString()}</p>
+                    {offer.hasOffer && offer.compareAtPrice > Number(product.price || 0) && (
+                      <p className="text-sm font-bold text-slate-400 line-through">
+                        Rs {offer.compareAtPrice.toLocaleString()}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Button
+                      onClick={() => openEditModal(product)}
+                      className="bg-slate-950 hover:bg-red-700 text-white flex-1"
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      onClick={() => handleDelete(product._id)}
+                      className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-100 flex-1"
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <div className="text-gray-800 col-span-full bg-white border-2 border-slate-200 rounded-lg p-6 text-center">No matching products found.</div>
         )}
@@ -217,8 +264,57 @@ export default function AllProducts() {
               onChange={(e) => setCurrentProduct({ ...currentProduct, weight: e.target.value })}
               placeholder="weight"
             />
+            <div className="rounded-2xl border border-red-100 bg-red-50/60 p-4">
+              <p className="mb-3 text-sm font-black uppercase tracking-[0.16em] text-red-600">
+                Offer settings
+              </p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <Input
+                  value={currentProduct.compareAtPrice}
+                  type="number"
+                  onChange={(e) => setCurrentProduct({ ...currentProduct, compareAtPrice: e.target.value })}
+                  placeholder="Compare at price"
+                />
+                <Input
+                  value={currentProduct.discountPercent}
+                  type="number"
+                  onChange={(e) => setCurrentProduct({ ...currentProduct, discountPercent: e.target.value })}
+                  placeholder="Discount %"
+                />
+                <Input
+                  value={currentProduct.offerLabel}
+                  onChange={(e) => setCurrentProduct({ ...currentProduct, offerLabel: e.target.value })}
+                  placeholder="Offer label"
+                />
+                <Input
+                  value={currentProduct.offerEndsAt}
+                  type="date"
+                  onChange={(e) => setCurrentProduct({ ...currentProduct, offerEndsAt: e.target.value })}
+                />
+              </div>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                <label className="flex items-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-700">
+                  <input
+                    type="checkbox"
+                    checked={currentProduct.isWeeklyOffer}
+                    onChange={(e) => setCurrentProduct({ ...currentProduct, isWeeklyOffer: e.target.checked })}
+                    className="h-4 w-4 accent-red-600"
+                  />
+                  Weekly offer
+                </label>
+                <label className="flex items-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-700">
+                  <input
+                    type="checkbox"
+                    checked={currentProduct.isFeatured}
+                    onChange={(e) => setCurrentProduct({ ...currentProduct, isFeatured: e.target.checked })}
+                    className="h-4 w-4 accent-red-600"
+                  />
+                  Featured
+                </label>
+              </div>
+            </div>
             <div>
-              <label className="block text-gray-300 mb-1 text-sm">Product Image</label>
+              <label className="block text-gray-700 mb-1 text-sm font-semibold">Product Image</label>
               <input
                 type="file"
                 accept="image/*"

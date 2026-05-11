@@ -107,7 +107,7 @@ function Categories() {
                                         <ArrowRight className="h-4 w-4" aria-hidden />
                                     </span>
                                 </div>
-                                <p className="mt-1 text-xs font-semibold text-slate-400">Shop deals</p>
+                                <p className="mt-1 text-xs font-semibold text-slate-400">Shop products</p>
                             </div>
                         </a>
                     ))

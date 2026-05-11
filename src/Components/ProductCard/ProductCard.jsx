@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import "./ProductCard.css";
 import { useState, useEffect, useRef } from "react";
-import { Heart, ShoppingBag, Star } from "lucide-react";
+import { Heart } from "lucide-react";
 import gsap from "gsap";
 import AddToCart from "../AddToCart/AddToCart";
 import { api } from "../../api";
 import { getImageUrl } from "../../utils/imageHelper";
+import { getProductOffer } from "../../utils/offerHelpers";
 import toast from "react-hot-toast"; // ✅ added
 
 function ProductCard({ product, refreshWishlist }) {
@@ -103,16 +104,25 @@ function ProductCard({ product, refreshWishlist }) {
   const productImage = getImageUrl(product?.image);
   const productName = product?.name || "Unnamed Product";
   const price = Number(product?.price || 0).toLocaleString();
+  const offer = getProductOffer(product);
+  const flavors = Array.isArray(product?.flavor)
+    ? product.flavor.filter((f) => String(f).trim() !== "")
+    : String(product?.flavor || "")
+        .split(",")
+        .map((f) => f.trim())
+        .filter(Boolean);
 
   return (
     <article ref={cardRef} className="product-card-container">
       <div className="product-card group">
         <div className="relative overflow-hidden rounded-[1.35rem] bg-slate-100">
-          <Link to="/products" aria-label={`View ${productName}`}>
-            <span className="absolute left-3 top-3 z-10 rounded-full bg-red-600 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-white shadow-lg">
-              Deal
-            </span>
-          </Link>
+          {offer.hasOffer && (
+            <Link to="/products" aria-label={`View ${productName}`}>
+              <span className="absolute left-3 top-3 z-10 rounded-full bg-red-600 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-white shadow-lg">
+                {offer.discountPercent > 0 ? `${offer.discountPercent}% OFF` : offer.label}
+              </span>
+            </Link>
+          )}
           <button
             className="wishlist-btn absolute right-3 top-3 z-10"
             onClick={handleWishlist}
@@ -133,12 +143,11 @@ function ProductCard({ product, refreshWishlist }) {
         </div>
 
         <div className="content px-1 pt-4">
-          <div className="mb-2 flex items-center gap-1 text-yellow-500">
-            {[0, 1, 2, 3, 4].map((x) => (
-              <Star key={x} className="h-3.5 w-3.5 fill-current" aria-hidden />
-            ))}
-            <span className="ml-1 text-xs font-semibold text-slate-400">Value pick</span>
-          </div>
+          {offer.hasOffer && (
+            <p className="mb-2 text-xs font-black uppercase tracking-[0.14em] text-red-600">
+              {offer.label}
+            </p>
+          )}
 
           <h4 className="line-clamp-2 min-h-[48px] text-base font-black leading-6 text-slate-950" title={productName}>
             {productName}
@@ -147,22 +156,25 @@ function ProductCard({ product, refreshWishlist }) {
           <div className="my-3 flex items-end justify-between gap-3">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Price</p>
-              <p className="text-2xl font-black text-red-600">Rs {price}</p>
+              <div className="flex flex-wrap items-baseline gap-2">
+                <p className="text-2xl font-black text-red-600">Rs {price}</p>
+                {offer.hasOffer && offer.compareAtPrice > Number(product?.price || 0) && (
+                  <p className="text-sm font-bold text-slate-400 line-through">
+                    Rs {offer.compareAtPrice.toLocaleString()}
+                  </p>
+                )}
+              </div>
             </div>
-            <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2.5 py-1 text-xs font-black text-yellow-800">
-              <ShoppingBag className="h-3.5 w-3.5" aria-hidden />
-              Stock
-            </span>
           </div>
 
-          {(product?.flavor?.length > 0 || product?.weight) && (
+          {/* {(flavors.length > 0 || product?.weight) && (
             <div className="flavor-weight mb-3 flex items-center justify-between gap-2">
-              {product?.flavor?.filter(f => f.trim() !== "").length > 0 && (
+              {flavors.length > 0 && (
                 <div className="line-clamp-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-500">
-                  {product.flavor.filter(f => f.trim() !== "").join(", ")}
+                  {flavors.join(", ")}
                 </div>
               )}
-              {product?.flavor?.filter(f => f.trim() !== "").length === 0 && (
+              {flavors.length === 0 && (
                 <div className="text-xs p-1 rounded-md">
                 </div>
               )}
@@ -172,7 +184,7 @@ function ProductCard({ product, refreshWishlist }) {
                 </p>
               )}
             </div>
-          )}
+          )} */}
 
           <AddToCart product={product} />
         </div>
