@@ -175,7 +175,7 @@ function Banner() {
             </div>
           </div>
 
-          <div className="absolute left-1/2 top-1/2 w-[min(86vw,430px)] -translate-x-1/2 -translate-y-1/2 rounded-[2.2rem] border border-white/20 bg-white/12 p-5 shadow-[0_35px_90px_rgba(15,23,42,0.28)] backdrop-blur-md">
+          {/* <div className="absolute left-1/2 top-1/2 w-[min(86vw,430px)] -translate-x-1/2 -translate-y-1/2 rounded-[2.2rem] border border-white/20 bg-white/12 p-5 shadow-[0_35px_90px_rgba(15,23,42,0.28)] backdrop-blur-md">
             <div className="rounded-[1.7rem] bg-white p-4">
               <div className="mb-4 flex items-center justify-between">
                 <div>
@@ -184,17 +184,9 @@ function Banner() {
                 </div>
                 <ShoppingBag className="h-8 w-8 text-red-600" aria-hidden />
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                {['Protein', 'Creatine', 'Vitamins', 'Gainers'].map((name, index) => (
-                  <div key={name} className="rounded-2xl bg-slate-100 p-4">
-                    <div className={`mb-4 h-20 rounded-2xl ${index % 2 ? 'bg-yellow-200' : 'bg-red-100'}`} />
-                    <p className="text-sm font-bold text-slate-900">{name}</p>
-                    <p className="text-xs text-slate-500">From Rs. {index % 2 ? '999' : '1,499'}</p>
-                  </div>
-                ))}
-              </div>
+             
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
