@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CategoryProducts from "../../Components/CategoryProducts/CategoryProducts";
 import { fetchAllProducts } from "../../api";
-import { toast } from "react-hot-toast";
 function Products() {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -117,7 +116,23 @@ function Products() {
   });
 
   return (
-    <section id="products" className="py-10">
+    <section id="products" className="bg-[#f8fafc] py-10">
+      <div className="container mb-4 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+        <p className="text-xs font-black uppercase tracking-[0.22em] text-red-600">Fresh catalogue</p>
+        <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
+              Products people are buying
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm text-slate-500">
+              Category-wise product sections with value-store style cards, offer labels, and fast checkout actions.
+            </p>
+          </div>
+          <span className="inline-flex w-fit rounded-full bg-red-50 px-4 py-2 text-sm font-black text-red-700">
+            {sortedGroups.length} categories
+          </span>
+        </div>
+      </div>
       {sortedGroups.map((group) => (
         <CategoryProducts
           key={group.catId}

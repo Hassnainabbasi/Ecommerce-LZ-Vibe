@@ -24,9 +24,9 @@ function Layout() {
                     href="https://wa.me/923226350143"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="whatsapp fixed z-[100000] bottom-[5%] right-[3%]"
+                    className="whatsapp fixed z-[100000] bottom-[5%] right-[3%] rounded-full bg-white p-2 shadow-[0_18px_45px_rgba(15,23,42,0.18)] ring-1 ring-slate-200 transition hover:-translate-y-1"
                 >
-                    <img src={whatsapp} alt="go to whatsapp" className='w-28 h-28' />
+                    <img src={whatsapp} alt="go to whatsapp" className='h-14 w-14 sm:h-16 sm:w-16' />
                 </a>
             }
         </>

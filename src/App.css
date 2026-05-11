@@ -1,18 +1,18 @@
 .container{
-    max-width: 80%;
+    max-width: min(1180px, 92%);
     margin: 0 auto;
 }
 .text-blue{
-    color: #2563eb;
+    color: #dc2626;
 }
 .bg-blue{
-    background-color: #2563eb;
+    background-color: #dc2626;
 }
 .text-blue-dark{
-    color: #1d4ed8;
+    color: #991b1b;
 }
 .bg-blue-dark{
-    background-color: #1d4ed8;
+    background-color: #991b1b;
 }
 
 button{

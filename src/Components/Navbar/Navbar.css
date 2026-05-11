@@ -1,51 +1,87 @@
 #header {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.96);
     color: #0f172a;
-    position: sticky;
-    top: 0;
-    border-bottom: 1px solid #e2e8f0;
-    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow: 0 12px 34px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+#header .nav-offer-bar {
+    background: linear-gradient(90deg, #7f1d1d, #dc2626 52%, #991b1b);
+    color: #fff7ed;
+}
+
+#header .nav-main {
+    background: rgba(255, 255, 255, 0.92);
+}
+
+#header .logo-ring {
+    display: grid;
+    place-items: center;
+    padding: 3px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #dc2626, #facc15);
+    box-shadow: 0 12px 28px rgba(220, 38, 38, 0.18);
 }
 
 #header nav a {
-    font-size: 16px;
-    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 800;
+    color: #334155;
+    transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 
 #header nav a:hover {
-    color: #2563eb;
+    color: #991b1b;
+    background: #fff7ed;
+    transform: translateY(-1px);
 }
 
 #header nav a.active {
-    color: #2563eb;
+    color: #991b1b;
+    background: #fef3c7;
 }
 
-#header .buttons-container a:hover {
-    color: #2563eb;
+#header .nav-icon-btn,
+#header .nav-account {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #0f172a;
+    padding: 0 14px;
+    font-size: 13px;
+    font-weight: 800;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, color 0.2s ease;
 }
 
-#header .buttons-container a.active {
-    color: #2563eb;
+#header .nav-icon-btn {
+    width: 42px;
+    padding: 0;
+}
+
+#header .nav-icon-btn:hover,
+#header .nav-account:hover {
+    color: #dc2626;
+    border-color: #fecaca;
+    box-shadow: 0 12px 30px rgba(220, 38, 38, 0.12);
+    transform: translateY(-1px);
 }
 
 @media (max-width: 1366px) {
-    #header > div.container{
-        height: 75px;
-    }
-    #header .logo img{
-        width: 85px;
-    }
-    #header .logo h1{
-        font-size: 16px;
-    }
     #header nav a{
         font-size: 13px;
-    }
-    #header .buttons-container a{
-        font-size: 13px;
-    }
-    #header .buttons-container  i{
-        font-size: 14px;
+        padding-inline: 12px;
     }
 }
 
@@ -55,30 +91,43 @@
         top: 0;
         right: 0;
         z-index: 50;
-        padding-top: 10vw;
+        padding: 78px 22px 22px;
         width: 0;
         overflow: hidden;
         height: 100vh;
         background-color: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        border-left: 1px solid #e2e8f0;
+        border-left: 1px solid #fee2e2;
         box-shadow: -4px 0 24px rgba(15, 23, 42, 0.08);
-            /* transform: translateX(200px); */
         transition: width 0.4s ease;
     }
 
     #header nav.showMenu {
-        /* transform: translateX(0); */
-        width: 200px;
+        width: min(86vw, 320px);
     }
 
     #header nav ul {
         flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
     }
 
-    #header nav button {
+    #header nav a {
+        justify-content: center;
+        width: 100%;
+        background: #f8fafc;
+    }
+
+    #header nav .mobile-close {
         display: inline-block;
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        border: 1px solid #e2e8f0;
+        border-radius: 999px;
+        padding: 10px;
+        background: #ffffff;
     }
 
     #header .buttons-container button.menu-btn {
@@ -87,9 +136,6 @@
 }
 
 @media (max-width: 750px) {
-    #header nav a {
-        font-size: 14px;
-    }
     #header nav li.add-me {
         display: block;
     }
@@ -97,48 +143,14 @@
     #header .buttons-container a.remove-me {
         display: none;
     }
-    .cart-count{
-        font-size: 11px;
-        width: 15px;
-        height: 15px;
-    }
 }
 
 @media (max-width: 500px) {
-    #header .logo img {
-        width: 100px;
-    }
-
-    #header>.container {
+    #header .container {
         gap: 10px;
+        max-width: 94%;
     }
-    #header .logo img{
-        width: 80px;
-    }
-    #header .logo h1{
-        font-size: 18px;
-    }
-}
-
-@media (max-width: 440px) {
-    #header .logo h1{
-        font-size: 18px;
-    }
-    #header .buttons-container {
-        gap: 10px;
-    }
-
-    #header .cart-btn {
-        background-color: transparent;
-        padding: 0;
-    }
-
-    #header .cart-btn i {
-        font-size: 20px;
-        margin-left: 0;
-    }
-
-    #header .cart-btn span {
+    #header .nav-offer-bar {
         display: none;
     }
 }
