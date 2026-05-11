@@ -105,12 +105,7 @@ function ProductCard({ product, refreshWishlist }) {
   const productName = product?.name || "Unnamed Product";
   const price = Number(product?.price || 0).toLocaleString();
   const offer = getProductOffer(product);
-  const flavors = Array.isArray(product?.flavor)
-    ? product.flavor.filter((f) => String(f).trim() !== "")
-    : String(product?.flavor || "")
-        .split(",")
-        .map((f) => f.trim())
-        .filter(Boolean);
+  console.log(offer);
 
   return (
     <article ref={cardRef} className="product-card-container">
@@ -155,14 +150,15 @@ function ProductCard({ product, refreshWishlist }) {
 
           <div className="my-3 flex items-end justify-between gap-3">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Price</p>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Price Rs.</p>
               <div className="flex flex-wrap items-baseline gap-2">
-                <p className="text-2xl font-black text-red-600">Rs {price}</p>
-                {offer.hasOffer && offer.compareAtPrice > Number(product?.price || 0) && (
-                  <p className="text-sm font-bold text-slate-400 line-through">
-                    Rs {offer.compareAtPrice.toLocaleString()}
-                  </p>
+                   {offer.hasOffer && offer.compareAtPrice && (
+                  <p className={`text-2xl font-bold ${offer.compareAtPrice ? "text-slate-400" : ""}`}>
+                    <span className={`${offer.compareAtPrice ? "text-red-600 font-black" : ""}`}>{offer.compareAtPrice.toLocaleString()}</span>
+                  </p>  
                 )}
+                <p className={`text-2xl font-black text-red-600 ${offer.compareAtPrice ? "line-through text-slate-400" : ""}`}>{price}</p>
+             
               </div>
             </div>
           </div>

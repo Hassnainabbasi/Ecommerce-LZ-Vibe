@@ -231,10 +231,10 @@ export default function AllProducts() {
 
       {/* Edit Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-lg overflow-y-auto max-h-[90vh]">
           <DialogHeader>
-            <DialogTitle>Edit Product</DialogTitle>
-            <DialogDescription>Update product details below</DialogDescription>
+            <DialogTitle className="text-2xl font-black text-white">Edit Product</DialogTitle>
+            <DialogDescription className="text-sm text-white/70">Update product details below</DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 mt-2">
@@ -254,7 +254,7 @@ export default function AllProducts() {
               onChange={(e) => setCurrentProduct({ ...currentProduct, category: e.target.value })}
               placeholder="Category"
             />
-     <Input
+     {/* <Input
               value={currentProduct.flavor}
               onChange={(e) => setCurrentProduct({ ...currentProduct, flavor: e.target.value })}
               placeholder="flavor"
@@ -263,7 +263,7 @@ export default function AllProducts() {
               value={currentProduct.weight}
               onChange={(e) => setCurrentProduct({ ...currentProduct, weight: e.target.value })}
               placeholder="weight"
-            />
+            /> */}
             <div className="rounded-2xl border border-red-100 bg-red-50/60 p-4">
               <p className="mb-3 text-sm font-black uppercase tracking-[0.16em] text-red-600">
                 Offer settings
@@ -293,7 +293,7 @@ export default function AllProducts() {
                 />
               </div>
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                <label className="flex items-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-700">
+                <label className="flex items-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-black">
                   <input
                     type="checkbox"
                     checked={currentProduct.isWeeklyOffer}
@@ -302,7 +302,7 @@ export default function AllProducts() {
                   />
                   Weekly offer
                 </label>
-                <label className="flex items-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-700">
+                <label className="flex items-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-black">
                   <input
                     type="checkbox"
                     checked={currentProduct.isFeatured}
@@ -314,7 +314,7 @@ export default function AllProducts() {
               </div>
             </div>
             <div>
-              <label className="block text-gray-700 mb-1 text-sm font-semibold">Product Image</label>
+              <label className="block text-white mb-1 text-sm font-semibold">Product Image</label>
               <input
                 type="file"
                 accept="image/*"
