@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Heart, Menu, Search, ShoppingCart, UserRound, X } from 'lucide-react'
 import './Navbar.css'
 import logo from '../../assets/logo.png'
 import { CartContext } from '../../Context/CartContext'
@@ -15,60 +16,97 @@ function Navbar({ setOpenSearch }) {
     setCurrentUser(user);
   }, [location]);
 
+  const cartCount = cartData?.length || 0
+
   return (
-    <header id='header' className='sticky top-0 z-[1000] backdrop-blur-md'>
-      <div className="container flex justify-between items-center gap-15 h-[90px]">
-        <div className="logo">
-          <Link to='/' className='flex items-center'>
-            <img className='w-25' src={logo} alt="" />
-            <h1 className='font-semibold text-lg tracking-tight text-slate-900'>Shop</h1>
-          </Link>
-        </div>
-        <nav className={`${showMenu ? 'showMenu' : ''} flex-1`}>
-          <ul className='flex gap-10 text-xl items-center'>
-            <li>
-              <NavLink to='/'>Home</NavLink>
-            </li>
-            <li>
-              <NavLink to='/products'>Products</NavLink>
-            </li>
-            <li>
-              <NavLink to='/about'>About</NavLink>
-            </li>
-            <li>
-              <NavLink to='/contact'>Contact</NavLink>
-            </li>
-            <li className="add-me hidden">
-              {!currentUser ? <NavLink to="/login">Login / Register</NavLink> :
-                <NavLink to="/settings">Settings</NavLink>}
-            </li>
-            <li className='add-me hidden'>
-              <NavLink to="/wishlist">Wishlist</NavLink>
-            </li>
-          </ul>
-          <button onClick={() => setShowMenu(false)} className='hidden absolute top-5 left-5 text-lg px-1 cursor-pointer rounded-md border-1'>
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-        </nav>
-        <div className='buttons-container flex gap-5 items-center'>
-          <button onClick={() => setOpenSearch(true)} className='cursor-pointer'><i className="fa-solid fa-magnifying-glass text-lg"></i></button>
-          {!currentUser ? <NavLink to="/login" className='remove-me'>Login / Register</NavLink> :
-            <NavLink to="/settings" className='remove-me'>Settings</NavLink>}
-
-          <NavLink to="/wishlist" className='remove-me'><i className="fa-regular fa-heart text-lg me-2"></i></NavLink>
-          <div className="relative">
-            <NavLink to='/cart'><i className="fa-solid fa-cart-shopping text-lg me-2"></i></NavLink>
-            <span className="cart-count absolute -top-2 -right-1 bg-blue-600 text-white text-center text-xs font-semibold min-w-[1.1rem] h-[1.1rem] px-0.5 flex items-center justify-center rounded-full">
-              {cartData?.length}
-            </span>
-          </div>
-
-          <button onClick={() => setShowMenu(true)} className='menu-btn px-1 cursor-pointer rounded-md border-1 hidden'>
-            <i className="fa-solid fa-bars"></i>
-          </button>
+    <header id='header' className='sticky top-0 z-[1000]'>
+      <div className="nav-offer-bar">
+        <div className="container flex flex-wrap items-center justify-between gap-2 py-2 text-xs font-semibold">
+          <span>Wholesale prices rozana · New deals every week</span>
+          <span className="hidden sm:inline">Need help? WhatsApp support available</span>
         </div>
       </div>
-      {showMenu && <div className="fixed inset-0 bg-slate-900/30 z-40" onClick={() => setShowMenu(false)}></div>}
+
+      <div className="nav-main">
+        <div className="container flex h-[82px] items-center justify-between gap-5">
+          <Link to='/' className='logo flex items-center gap-3'>
+            <span className="logo-ring">
+              <img className='h-14 w-14 rounded-full object-cover' src={logo} alt="Store logo" />
+            </span>
+            <span className="hidden leading-tight sm:block">
+              <span className="block text-lg font-black tracking-tight text-slate-950">LZ Vibe</span>
+              <span className="block text-xs font-semibold uppercase tracking-[0.2em] text-red-600">Daily deals</span>
+            </span>
+          </Link>
+
+          <nav className={`${showMenu ? 'showMenu' : ''} flex-1`}>
+            <ul className='flex items-center justify-center gap-2'>
+              {[
+                ['/', 'Home'],
+                ['/products', 'Products'],
+                ['/about', 'About'],
+                ['/contact', 'Contact'],
+              ].map(([to, label]) => (
+                <li key={to}>
+                  <NavLink to={to} onClick={() => setShowMenu(false)}>
+                    {label}
+                  </NavLink>
+                </li>
+              ))}
+              <li className="add-me hidden">
+                {!currentUser ? (
+                  <NavLink to="/login" onClick={() => setShowMenu(false)}>Login / Register</NavLink>
+                ) : (
+                  <NavLink to="/settings" onClick={() => setShowMenu(false)}>Settings</NavLink>
+                )}
+              </li>
+              <li className='add-me hidden'>
+                <NavLink to="/wishlist" onClick={() => setShowMenu(false)}>Wishlist</NavLink>
+              </li>
+            </ul>
+            <button
+              type="button"
+              onClick={() => setShowMenu(false)}
+              className='mobile-close hidden'
+              aria-label="Close menu"
+            >
+              <X className="h-5 w-5" aria-hidden />
+            </button>
+          </nav>
+
+          <div className='buttons-container flex items-center gap-2'>
+            <button onClick={() => setOpenSearch(true)} className='nav-icon-btn' aria-label="Open search">
+              <Search className="h-5 w-5" aria-hidden />
+            </button>
+            {!currentUser ? (
+              <NavLink to="/login" className='remove-me nav-account'>
+                <UserRound className="h-4 w-4" aria-hidden />
+                Login
+              </NavLink>
+            ) : (
+              <NavLink to="/settings" className='remove-me nav-account'>
+                <UserRound className="h-4 w-4" aria-hidden />
+                Settings
+              </NavLink>
+            )}
+
+            <NavLink to="/wishlist" className='remove-me nav-icon-btn' aria-label="Wishlist">
+              <Heart className="h-5 w-5" aria-hidden />
+            </NavLink>
+            <NavLink to='/cart' className="nav-icon-btn relative" aria-label="Cart">
+              <ShoppingCart className="h-5 w-5" aria-hidden />
+              <span className="cart-count absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-[11px] font-black text-white">
+                {cartCount}
+              </span>
+            </NavLink>
+
+            <button onClick={() => setShowMenu(true)} className='menu-btn nav-icon-btn hidden' aria-label="Open menu">
+              <Menu className="h-5 w-5" aria-hidden />
+            </button>
+          </div>
+        </div>
+      </div>
+      {showMenu && <div className="fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm" onClick={() => setShowMenu(false)}></div>}
     </header>
   )
 }

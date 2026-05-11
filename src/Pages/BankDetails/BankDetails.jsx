@@ -67,12 +67,12 @@ export default function BankDetails() {
                     </p>
                     <p className="text-[#58ffbf] text-lg font-semibold">
                         <a
-                            href="https://wa.me/+923226350143"
+                            href="https://wa.me/+923460353918"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="underline hover:text-blue-600 transition"
                         >
-                           +923226350143
+                           +923460353918
                         </a>
                     </p>
                     <p className="text-[#58ffbf] mt-2 text-sm">
