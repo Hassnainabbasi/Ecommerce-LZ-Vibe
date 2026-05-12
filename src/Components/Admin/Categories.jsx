@@ -86,7 +86,7 @@ export default function Categories() {
         setCategories(data.categories || []);
       } else {
         // If API doesn't exist, get categories from products
-        const productsRes = await fetch(`${API_BASE}/products/getAllProducts`, {
+        const productsRes = await fetch(`${API_BASE}products/getAllProducts`, {
           credentials: "include",
         });
         const productsData = await productsRes.json();

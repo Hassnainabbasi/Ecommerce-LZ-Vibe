@@ -147,7 +147,7 @@ export default function AddProducts() {
       }
 
       // Fallback: Get categories from products
-      const productsRes = await fetch(`${API_BASE}/products/getAllProducts`, {
+      const productsRes = await fetch(`${API_BASE}products/getAllProducts`, {
         credentials: "include",
       });
       const productsData = await productsRes.json();
@@ -220,7 +220,7 @@ export default function AddProducts() {
       });
 
       const res = await axios.post(
-        `${import.meta.env.VITE_API_BASE}/products`,
+        `${import.meta.env.VITE_API_BASE}products`,
         data,
         {
           headers: {
@@ -359,7 +359,7 @@ export default function AddProducts() {
       for (let i = 0; i < products.length; i += BULK_PRODUCT_CHUNK) {
         const chunk = products.slice(i, i + BULK_PRODUCT_CHUNK);
         const res = await axios.post(
-          `${API_BASE}/products/bulk-import`,
+          `${API_BASE}products/bulk-import`,
           { products: chunk },
           {
             headers: {

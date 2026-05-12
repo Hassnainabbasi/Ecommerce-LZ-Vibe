@@ -11,7 +11,7 @@ export default function Users() {
     const fetchUsers = async () => {
       try {
 
-        const res = await fetch(`${import.meta.env.VITE_API_BASE}/users/getAllUsers`)
+        const res = await fetch(`${import.meta.env.VITE_API_BASE}users/getAllUsers`)
 
 
         if (!res.ok) {

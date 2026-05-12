@@ -49,7 +49,7 @@ export default function AllProducts() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/products/getAllProducts`, { credentials: "include" });
+      const res = await fetch(`${API_BASE}products/getAllProducts`, { credentials: "include" });
       const data = await res.json();
       if (data.success) setProducts(data.products);
       else toast.error("Failed to fetch products");
@@ -101,7 +101,7 @@ export default function AllProducts() {
       formData.append("isFeatured", String(currentProduct.isFeatured));
       if (currentProduct.imageFile) formData.append("image", currentProduct.imageFile);
 
-      const res = await fetch(`${API_BASE}/products/${currentProduct._id}`, {
+      const res = await fetch(`${API_BASE}products/${currentProduct._id}`, {
         method: "PUT",
         body: formData,
         credentials: "include", // ✅ Send HTTP-only cookie
@@ -125,7 +125,7 @@ export default function AllProducts() {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
 
     try {
-      const res = await fetch(`${API_BASE}/products/${id}`, {
+      const res = await fetch(`${API_BASE}products/${id}`, {
         method: "DELETE",
         credentials: "include", // ✅ Send HTTP-only cookie
       });
