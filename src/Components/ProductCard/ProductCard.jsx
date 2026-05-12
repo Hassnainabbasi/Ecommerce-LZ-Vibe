@@ -8,6 +8,7 @@ import { api } from "../../api";
 import { getImageUrl } from "../../utils/imageHelper";
 import { getProductOffer } from "../../utils/offerHelpers";
 import toast from "react-hot-toast"; // ✅ added
+import axios from "axios";
 
 function ProductCard({ product, refreshWishlist }) {
   const [isInWishlist, setIsInWishlist] = useState(false);
