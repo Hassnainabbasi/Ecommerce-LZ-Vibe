@@ -56,7 +56,7 @@ export const fetchAllProducts = () => {
 };
 export const createOrder = (orderData) => {
   return api
-    .post("/api/orders", orderData)
+    .post("api/orders", orderData)
     .then((res) => res.data)
     .catch((err) => {
       console.error("❌ Error creating order:", err);
@@ -66,7 +66,7 @@ export const createOrder = (orderData) => {
 
 export const fetchAllOrders = () => {
   return api
-    .get("/api/orders", { withCredentials: true }) // Send cookie automatically
+    .get("api/orders", { withCredentials: true }) // Send cookie automatically
     .then((res) => res.data.orders)
     .catch((err) => {
       console.error("❌ Error fetching orders:", err);
@@ -77,7 +77,7 @@ export const fetchAllOrders = () => {
 
 export const submitContactForm = (formData) => {
   return api
-    .post("/api/contact", formData)
+    .post("api/contact", formData)
     .then((res) => res.data)
     .catch((err) => {
       console.error("❌ Error submitting contact form:", err);
@@ -87,9 +87,9 @@ export const submitContactForm = (formData) => {
 export const fetchDashboardStats = async () => {
   try {
     const [productsRes, usersRes, ordersRes] = await Promise.all([
-      api.get("/products/stats/count"),
-      api.get("/api/users/stats/count"),
-      api.get("/api/orders/stats/count"),
+      api.get("products/stats/count"),
+      api.get("api/users/stats/count"),
+      api.get("api/orders/stats/count"),
     ]);
 
     return {

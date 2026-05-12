@@ -12,7 +12,7 @@ export default function Sidebar() {
   const handleLogout = async () => {
     try {
 
-   await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/logout`, {
+   await fetch(`${import.meta.env.VITE_API_BASE}api/admin/logout`, {
        
 
 

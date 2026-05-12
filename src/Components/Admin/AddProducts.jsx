@@ -133,7 +133,7 @@ export default function AddProducts() {
       
       // Try to fetch from categories API
       try {
-        const res = await fetch(`${API_BASE}/api/categories`, {
+        const res = await fetch(`${API_BASE}api/categories`, {
           credentials: "include",
         });
         const data = await res.json();

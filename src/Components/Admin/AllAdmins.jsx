@@ -16,7 +16,7 @@ export default function AllAdmins() {
   const fetchAdmins = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${API_BASE}/api/admin/all`, {
+      const res = await fetch(`${API_BASE}api/admin/all`, {
         credentials: "include",
       });
       const data = await res.json();
@@ -61,7 +61,7 @@ export default function AllAdmins() {
         updateData.password = editData.password.trim();
       }
 
-      const res = await fetch(`${API_BASE}/api/admin/${adminId}`, {
+      const res = await fetch(`${API_BASE}api/admin/${adminId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -89,8 +89,8 @@ export default function AllAdmins() {
     }
 
     try {
-      const res = await fetch(`${API_BASE}/api/admin/${adminId}`, {
-        method: "DELETE",
+      const res = await fetch(`${API_BASE}api/admin/${adminId}`, {
+        method: "DELETE", 
         credentials: "include",
       });
 

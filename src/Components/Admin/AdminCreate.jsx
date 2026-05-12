@@ -39,7 +39,7 @@ export default function AdminCreate() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE}/api/admin/create`, {
+      const res = await fetch(`${API_BASE}api/admin/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

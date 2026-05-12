@@ -14,7 +14,7 @@ export default function Wishlist() {
 
         const res = await axios.get(
 
-          `${import.meta.env.VITE_API_BASE}/api/users/wishlist/${currentUser.email}`
+          `${import.meta.env.VITE_API_BASE}api/users/wishlist/${currentUser.email}`
 
 
         );
@@ -31,7 +31,7 @@ export default function Wishlist() {
     const currentUser = JSON.parse(localStorage.getItem("user"));
     const res = await axios.get(
 
-      `${import.meta.env.VITE_API_BASE}/api/users/wishlist/${currentUser.email}`
+      `${import.meta.env.VITE_API_BASE}api/users/wishlist/${currentUser.email}`
 
     );
     setWishlist(res.data.wishlist);

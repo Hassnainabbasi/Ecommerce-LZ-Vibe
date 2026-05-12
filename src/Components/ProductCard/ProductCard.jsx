@@ -65,7 +65,7 @@ function ProductCard({ product, refreshWishlist }) {
       setLoading(true);
       const action = isInWishlist ? "remove" : "add";
 
-      const response = await api.post("/api/users/wishlist", {
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE}api/users/wishlist`, {
         email,
         productId: product._id,
         action,
@@ -74,7 +74,7 @@ function ProductCard({ product, refreshWishlist }) {
       if (response.data?.user) {
         localStorage.setItem("user", JSON.stringify(response.data.user));
       } else {
-        const res = await api.get(`/api/users/wishlist/${email}`);
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE}api/users/wishlist/${email}`);
         currentUser.wishlist = res.data.wishlist;
         localStorage.setItem("user", JSON.stringify(currentUser));
       }
