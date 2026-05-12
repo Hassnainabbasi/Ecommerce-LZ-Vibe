@@ -29,7 +29,7 @@ const Register = () => {
 
     try {
 
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/users/register`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}users/register`, {
 
 
         method: "POST",

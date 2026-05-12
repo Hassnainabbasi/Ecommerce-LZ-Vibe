@@ -23,7 +23,7 @@ const Login = () => {
 
       if (userType === 'customer') {
         // Customer/User Login
-        const res = await fetch(`${backendApi}/users/login`, {
+        const res = await fetch(`${backendApi}users/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ const Login = () => {
         navigate('/')
       } else {
         // Worker/Admin Login
-        const res = await fetch(`${backendApi}/api/admin/login`, {
+        const res = await fetch(`${backendApi}api/admin/login`, {
           method: 'POST',
           headers: { "Content-Type": "application/json" },
           credentials: "include",
