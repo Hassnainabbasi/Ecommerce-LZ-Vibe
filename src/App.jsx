@@ -38,7 +38,7 @@ function AdminProtectedRoute({ children }) {
   useEffect(() => {
     async function verifyAdmin() {
       try {
-        const res = await fetch(`${backendApi}/api/admin/verify`, {
+        const res = await fetch(`${backendApi}api/admin/verify`, {
           method: "GET",
           credentials: "include",
         });
@@ -76,7 +76,7 @@ function AdminLoginRoute() {
   useEffect(() => {
     async function verifyAdmin() {
       try {
-        const res = await fetch(`${backendApi}/api/admin/verify`, {
+        const res = await fetch(`${backendApi}api/admin/verify`, {
           method: "GET",
           credentials: "include",
         });

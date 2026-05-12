@@ -110,7 +110,7 @@ export default function AddProducts() {
     }
 
     axios
-      .get(`${import.meta.env.VITE_API_BASE}/api/admin/verify`, {
+      .get(`${import.meta.env.VITE_API_BASE}api/admin/verify`, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       })
