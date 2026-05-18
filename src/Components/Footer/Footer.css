@@ -1,17 +1,11 @@
-#footer {
-    border-top: 1px solid rgba(255,255,255,0.08);
-}
-
 #footer a {
-    transition: color 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 #footer a:hover {
-    color: #fde047;
+  color: #0d9488;
 }
 
-@media (max-width: 640px) {
-    #footer .container {
-        max-width: 92%;
-    }
+.footer--with-tabs {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }

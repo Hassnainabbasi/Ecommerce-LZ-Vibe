@@ -13,8 +13,8 @@ export default function Cart() {
   );
 
   return (
-    <div className="flex justify-center items-start py-10 text-gray-800 px-4 md:px-0">
-      <div className="w-full max-w-5xl bg-white border-2 border-slate-200 rounded-2xl shadow-lg p-6 md:p-8 flex flex-col md:flex-row gap-8">
+    <div className="page-section text-gray-800">
+      <div className="container page-card flex flex-col gap-8 lg:flex-row lg:gap-10">
 
         {/* 🛒 Cart Items */}
         <div className="flex-1">
@@ -29,7 +29,7 @@ export default function Cart() {
             cartData.map((item) => (
               <div
                 key={item.productId}
-                className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-700 py-4 gap-4"
+                className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 py-4 gap-4"
               >
                 {/* 🖼️ Product Info */}
                 <div className="flex items-center gap-4 sm:gap-5 w-full sm:w-auto">
@@ -77,7 +77,7 @@ export default function Cart() {
                   </div>
                   <button
                     onClick={() => removeCartItem(item.productId)}
-                    className="border border-blue-500 text-blue-600 px-3 py-1 sm:px-4 sm:py-1 rounded-lg hover:bg-blue-600 hover:text-white transition"
+                    className="border border-teal-500 text-teal-600 px-3 py-1 sm:px-4 sm:py-1 rounded-lg hover:bg-teal-600 hover:text-white transition"
                   >
                     Remove
                   </button>
@@ -99,13 +99,13 @@ export default function Cart() {
               <span>Rs. {totalPrice.toLocaleString()}</span>
             </div>
 
-            <div className="flex justify-between text-lg sm:text-xl font-bold mt-4 border-t border-gray-700 pt-4">
+            <div className="flex justify-between text-lg sm:text-xl font-bold mt-4 border-t border-slate-200 pt-4">
               <span>Total</span>
               <span>Rs. {totalPrice.toLocaleString()}</span>
             </div>
 
             <Link to='/checkout'>
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white mt-4 sm:mt-6 py-2 sm:py-3 rounded-lg font-semibold transition">Checkout</button>
+              <button className="w-full bg-teal-600 hover:bg-teal-700 text-white mt-4 sm:mt-6 py-2 sm:py-3 rounded-lg font-semibold transition">Checkout</button>
             </Link>
           </div>
         )}

@@ -38,43 +38,46 @@ function Search({ setOpenSearch }) {
   return (
     <section
       id="search"
-      className="fixed top-0 left-0 z-[1000] w-full h-full pt-10  px-5 overflow-y-auto"
+      className="fixed inset-0 z-[1000] overflow-y-auto bg-slate-50/98 pt-6 pb-10 px-4 sm:px-6"
     >
-      <div className="search-content">
+      <div className="search-content container relative max-w-4xl">
         <button
-          className="absolute top-[3vw] right-[3vw] cursor-pointer text-gray-800"
+          type="button"
+          className="absolute right-0 top-0 grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white text-slate-700"
           onClick={() => setOpenSearch(false)}
+          aria-label="Close search"
         >
-          <i className="fa-solid fa-xmark text-[1.5vw]"></i>
+          <i className="fa-solid fa-xmark text-lg" />
         </button>
 
-        <div className="flex justify-center border-b-2 border-slate-300 max-w-[700px] mx-auto text-xl py-2">
+        <div className="mx-auto flex max-w-2xl border-b-2 border-slate-300 py-2 text-lg sm:text-xl">
           <input
             onChange={handleSearch}
             value={query}
             name="search"
-            className="outline-none flex-1 py-2 placeholder-gray-400 bg-transparent text-gray-800"
-            placeholder="Type here..."
-            type="text"
+            className="flex-1 bg-transparent py-2 text-gray-800 outline-none placeholder:text-gray-400"
+            placeholder="Search products..."
+            type="search"
+            autoFocus
           />
-          <button className="rounded-md text-sm p-2 cursor-pointer text-slate-800 hover:text-blue-600">
-            <i className="fa-solid fa-magnifying-glass text-xl"></i>
-          </button>
+          <span className="grid place-items-center p-2 text-slate-600" aria-hidden>
+            <i className="fa-solid fa-magnifying-glass text-xl" />
+          </span>
         </div>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-y-10 px-5 container py-10 mb-10">
+      <div className="container product-grid py-8 sm:py-10">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((item) => (
-            <ProductCard key={`${item._id || item.productId}`} setOpenSearch={setOpenSearch} product={item} />
+            <ProductCard key={item._id || item.productId} product={item} />
           ))
         ) : query.length > 0 ? (
-          <div className="text-center col-span-full bg-white border border-slate-200 rounded-xl p-6 shadow-md max-w-md mx-auto">
-            <div className="text-4xl mb-2">🔍</div>
-            <p className="text-gray-800 font-semibold">
-              No product found for "{query}"
+          <div className="col-span-full mx-auto max-w-md rounded-xl border border-slate-200 bg-white p-6 text-center shadow-md">
+            <div className="mb-2 text-4xl" aria-hidden>🔍</div>
+            <p className="font-semibold text-gray-800">
+              No product found for &quot;{query}&quot;
             </p>
-            <p className="text-gray-600 text-sm mt-2">Try searching with different keywords</p>
+            <p className="mt-2 text-sm text-gray-600">Try different keywords</p>
           </div>
         ) : null}
       </div>

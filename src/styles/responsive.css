@@ -1,0 +1,57 @@
+/* Shared responsive layout — mobile first, scales to large desktop */
+
+.store-shell {
+  width: 100%;
+  max-width: 1920px;
+  margin-inline: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: #ffffff;
+}
+
+.page-section {
+  width: 100%;
+  padding-block: clamp(1.5rem, 4vw, 3rem);
+}
+
+.page-card {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: clamp(1rem, 3vw, 2rem);
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+}
+
+.auth-page {
+  min-height: min(100vh, 100dvh);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 2rem);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 28rem;
+}
+
+.list-view-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .list-view-grid {
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .list-view-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

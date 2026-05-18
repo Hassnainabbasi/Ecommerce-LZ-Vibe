@@ -30,7 +30,7 @@ export default function Sidebar() {
       {/* Mobile Hamburger Button */}
       <button
         onClick={toggleSidebar}
-        className="lg:hidden fixed top-4 left-4 z-50 bg-slate-950 border border-white/10 text-white p-3 rounded-xl shadow-lg"
+        className="lg:hidden fixed top-4 left-4 z-50 bg-white border border-slate-200 text-slate-800 p-3 rounded-xl shadow-lg"
       >
         <i className={`fas ${isSidebarOpen ? 'fa-times' : 'fa-bars'}`}></i>
       </button>
@@ -46,7 +46,7 @@ export default function Sidebar() {
       {/* Sidebar */}
       <div className={`
         fixed lg:static inset-y-0 left-0 z-50
-        w-72 bg-slate-950 text-white transform transition-transform duration-300 ease-in-out shadow-2xl
+        w-72 bg-white text-slate-800 border-r border-slate-200 transform transition-transform duration-300 ease-in-out shadow-lg
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         <div className="p-6 border-b border-white/10">
@@ -59,7 +59,7 @@ export default function Sidebar() {
           <Link
             to="/admin"
             onClick={() => setIsSidebarOpen(false)}
-            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin' ? 'bg-gradient-to-r from-red-600 to-yellow-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
+            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
               }`}
           >
             <i className="fas fa-tachometer-alt w-6 mr-3"></i>
@@ -69,7 +69,7 @@ export default function Sidebar() {
           <Link
             to="/admin/users"
             onClick={() => setIsSidebarOpen(false)}
-            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/users' ? 'bg-gradient-to-r from-red-600 to-yellow-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
+            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/users' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
               }`}
           >
             <i className="fas fa-users w-6 mr-3"></i>
@@ -79,7 +79,7 @@ export default function Sidebar() {
           <Link
             to="/admin/all-products"
             onClick={() => setIsSidebarOpen(false)}
-            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/all-products' ? 'bg-gradient-to-r from-red-600 to-yellow-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
+            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/all-products' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
               }`}
           >
             <i className="fas fa-box w-6 mr-3"></i>
@@ -89,7 +89,7 @@ export default function Sidebar() {
           <Link
             to="/admin/add-product"
             onClick={() => setIsSidebarOpen(false)}
-            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/add-product' ? 'bg-gradient-to-r from-red-600 to-yellow-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
+            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/add-product' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
               }`}
           >
             <i className="fas fa-plus-circle w-6 mr-3"></i>
@@ -99,7 +99,7 @@ export default function Sidebar() {
           <Link
             to="/admin/categories"
             onClick={() => setIsSidebarOpen(false)}
-            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/categories' ? 'bg-gradient-to-r from-red-600 to-yellow-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
+            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/categories' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
               }`}
           >
             <i className="fas fa-tags w-6 mr-3"></i>
@@ -109,7 +109,7 @@ export default function Sidebar() {
           <Link
             to="/admin/create-admin"
             onClick={() => setIsSidebarOpen(false)}
-            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/create-admin' ? 'bg-gradient-to-r from-red-600 to-yellow-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
+            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/create-admin' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
               }`}
           >
             <i className="fas fa-user-plus w-6 mr-3"></i>
@@ -119,7 +119,7 @@ export default function Sidebar() {
           <Link
             to="/admin/all-admins"
             onClick={() => setIsSidebarOpen(false)}
-            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/all-admins' ? 'bg-gradient-to-r from-red-600 to-yellow-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
+            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/all-admins' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
               }`}
           >
             <i className="fas fa-users-cog w-6 mr-3"></i>
@@ -141,10 +141,10 @@ export default function Sidebar() {
       </div>
 
       {/* Mobile Bottom Navigation (Icons Only) */}
-      <div className="lg:hidden w-[100vw] h-[10vh] fixed bottom-0  left-0 right-0 z-10000 bg-slate-950 border-t border-white/10 text-white p-2 flex justify-center items-center shadow-lg">
+      <div className="lg:hidden w-[100vw] h-[10vh] fixed bottom-0 left-0 right-0 z-10000 bg-white border-t border-slate-200 text-slate-800 p-2 flex justify-center items-center shadow-lg">
         <Link
           to="/admin"
-          className={`flex flex-col items-center p-2 rounded-lg transition-colors flex-1 ${location.pathname === '/admin' ? 'bg-red-600 text-white' : 'text-slate-300 hover:bg-white/10'
+          className={`flex flex-col items-center p-2 rounded-lg transition-colors flex-1 ${location.pathname === '/admin' ? 'bg-teal-600 text-white' : 'text-slate-300 hover:bg-white/10'
             }`}
         >
           <i className="fas fa-tachometer-alt text-lg mb-1"></i>
@@ -153,7 +153,7 @@ export default function Sidebar() {
 
         <Link
           to="/admin/users"
-          className={`flex flex-col items-center p-2 rounded-lg transition-colors flex-1 ${location.pathname === '/admin/users' ? 'bg-red-600 text-white' : 'text-slate-300 hover:bg-white/10'
+          className={`flex flex-col items-center p-2 rounded-lg transition-colors flex-1 ${location.pathname === '/admin/users' ? 'bg-teal-600 text-white' : 'text-slate-300 hover:bg-white/10'
             }`}
         >
           <i className="fas fa-users text-lg mb-1"></i>
@@ -162,7 +162,7 @@ export default function Sidebar() {
 
         <Link
           to="/admin/all-products"
-          className={`flex flex-col items-center p-2 rounded-lg transition-colors flex-1 ${location.pathname === '/admin/all-products' ? 'bg-red-600 text-white' : 'text-slate-300 hover:bg-white/10'
+          className={`flex flex-col items-center p-2 rounded-lg transition-colors flex-1 ${location.pathname === '/admin/all-products' ? 'bg-teal-600 text-white' : 'text-slate-300 hover:bg-white/10'
             }`}
         >
           <i className="fas fa-box text-lg mb-1"></i>
@@ -171,7 +171,7 @@ export default function Sidebar() {
 
         <Link
           to="/admin/add-product"
-          className={`flex flex-col items-center p-2 rounded-lg transition-colors flex-1 ${location.pathname === '/admin/add-product' ? 'bg-red-600 text-white' : 'text-slate-300 hover:bg-white/10'
+          className={`flex flex-col items-center p-2 rounded-lg transition-colors flex-1 ${location.pathname === '/admin/add-product' ? 'bg-teal-600 text-white' : 'text-slate-300 hover:bg-white/10'
             }`}
         >
           <i className="fas fa-plus-circle text-lg mb-1"></i>
@@ -180,7 +180,7 @@ export default function Sidebar() {
 
         <Link
           to="/admin/categories"
-          className={`flex flex-col items-center p-2 rounded-lg transition-colors flex-1 ${location.pathname === '/admin/categories' ? 'bg-red-600 text-white' : 'text-slate-300 hover:bg-white/10'
+          className={`flex flex-col items-center p-2 rounded-lg transition-colors flex-1 ${location.pathname === '/admin/categories' ? 'bg-teal-600 text-white' : 'text-slate-300 hover:bg-white/10'
             }`}
         >
           <i className="fas fa-tags text-lg mb-1"></i>

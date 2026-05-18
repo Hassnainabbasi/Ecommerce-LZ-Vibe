@@ -2,7 +2,6 @@ import './Categories.css'
 import ScrollContainer from "react-indiana-drag-scroll";
 import "react-indiana-drag-scroll/dist/style.css";
 import { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Tags } from 'lucide-react';
 import gsap from 'gsap';
 import { fetchAllProducts } from '../../api';
 import { getImageUrl } from '../../utils/imageHelper';
@@ -40,78 +39,63 @@ function Categories() {
     useEffect(() => {
         if (loading || categories.length === 0) return;
         const ctx = gsap.context(() => {
-            gsap.from('.category-card', {
-                y: 24,
+            gsap.from('.category-circle-item', {
+                y: 16,
                 opacity: 0,
-                duration: 0.55,
-                stagger: 0.06,
+                duration: 0.45,
+                stagger: 0.05,
                 ease: 'power3.out',
             });
         }, sectionRef);
         return () => ctx.revert();
     }, [loading, categories.length]);
 
+    const formatLabel = (cat) =>
+        cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+
     if (loading) {
         return (
-            <section id='categories' className='py-14 px-5 bg-white'>
+            <section id='categories' className='categories-section py-8'>
                 <div className="container">
-                    <h2 className='text-2xl sm:text-3xl font-black text-slate-950 tracking-tight'>
-                      Top categories
-                    </h2>
-                    <p className='mt-2 text-gray-600'>Loading categories...</p>
+                    <p className='text-center text-slate-500'>Loading categories...</p>
                 </div>
             </section>
         );
     }
 
     return (
-        <section ref={sectionRef} id='categories' className='py-14 bg-white'>
-            <div className="container mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                    <p className="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-red-700">
-                        <Tags className="h-4 w-4" aria-hidden />
-                        Top categories
-                    </p>
-                    <h2 className='mt-3 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl'>
-                      Shop by category
-                    </h2>
-                    <p className="mt-2 max-w-xl text-sm text-slate-500">
-                        Quick links inspired by modern value-retail stores so customers reach products faster.
-                    </p>
-                </div>
-                <a href="#products" className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-bold text-slate-700 transition hover:border-red-200 hover:bg-red-50 hover:text-red-700">
-                    See all products
-                    <ArrowRight className="h-4 w-4" aria-hidden />
-                </a>
+        <section ref={sectionRef} id='categories' className='categories-section bg-white py-8 md:py-12'>
+            <div className="container mb-4 md:mb-6">
+                <p className="text-center text-xs font-bold uppercase tracking-[0.18em] text-teal-600 sm:text-left">
+                  Top categories
+                </p>
+                <h2 className="collection-title mt-2 text-center text-2xl font-semibold text-slate-500 sm:text-left md:text-3xl lg:text-4xl">
+                    Shop by
+                    <span className="inline sm:before:content-['_']"> Category</span>
+                </h2>
             </div>
             <ScrollContainer
-                className="category-items container flex gap-4 py-3 active:cursor-grab overflow-x-auto"
-                vertical={false}>
-                {
-                    categories?.map((item, index) => (
-                        <a className="category-card group block min-w-[190px]" href={`#${item?.category.toLowerCase().replace(/\s+/g, '-')}`} key={index}>
-                            <div className='overflow-hidden rounded-3xl border border-slate-200 bg-white p-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-red-200 hover:shadow-xl'>
-                                <div className="image h-36 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-red-50 to-yellow-50">
-                                    <img 
-                                        className='h-full w-full object-cover transition duration-500 group-hover:scale-110' 
-                                        src={getImageUrl(item?.image)} 
-                                        alt={item?.category}
-                                        onError={(e) => {
-                                            e.target.src = '/images/placeholder.png';
-                                        }}
-                                    />
-                                </div>
-                                <div className="mt-4 flex items-center justify-between gap-3">
-                                    <h3 className="line-clamp-1 font-black text-slate-900 transition-colors group-hover:text-red-700">{item?.category.charAt(0).toUpperCase() + item?.category.slice(1)}</h3>
-                                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-slate-100 text-slate-500 transition group-hover:bg-red-600 group-hover:text-white">
-                                        <ArrowRight className="h-4 w-4" aria-hidden />
-                                    </span>
-                                </div>
-                                <p className="mt-1 text-xs font-semibold text-slate-400">Shop products</p>
-                            </div>
-                        </a>
-                    ))
-                }
+                className="category-circles container flex gap-4 overflow-x-auto py-2 sm:gap-5 md:flex-wrap md:justify-center md:overflow-visible"
+                vertical={false}
+            >
+                {categories?.map((item, index) => (
+                    <a
+                        className="category-circle-item shrink-0"
+                        href={`#${item?.category.toLowerCase().replace(/\s+/g, '-')}`}
+                        key={index}
+                    >
+                        <div className="category-circle">
+                            <img
+                                src={getImageUrl(item?.image)}
+                                alt={item?.category}
+                                onError={(e) => {
+                                    e.target.src = '/images/placeholder.png';
+                                }}
+                            />
+                        </div>
+                        <span className="category-circle-label">{formatLabel(item?.category)}</span>
+                    </a>
+                ))}
             </ScrollContainer>
         </section>
     )

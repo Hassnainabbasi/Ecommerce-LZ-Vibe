@@ -1,9 +1,26 @@
+.site-main.has-mobile-nav {
+  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+}
+
+.whatsapp--above-tabs {
+  bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  right: clamp(12px, 4vw, 24px);
+}
+
+.whatsapp:not(.whatsapp--above-tabs) {
+  bottom: clamp(16px, 3vw, 32px);
+  right: clamp(12px, 4vw, 32px);
+}
+
+@media (min-width: 768px) {
+  .site-main.has-mobile-nav {
+    padding-bottom: 0;
+  }
+}
+
 @media (max-width: 500px) {
-    .whatsapp {
-        bottom: 3%;
-    }
-    .whatsapp img{
-        width: 80px;
-        height: 80px;
-    }
+  .whatsapp img {
+    width: 52px;
+    height: 52px;
+  }
 }

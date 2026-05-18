@@ -1,48 +1,56 @@
-.chase-hero {
-  background:
-    radial-gradient(circle at 18% 20%, rgba(250, 204, 21, 0.24), transparent 28%),
-    radial-gradient(circle at 82% 16%, rgba(248, 113, 113, 0.22), transparent 26%),
-    linear-gradient(135deg, #7f1d1d 0%, #dc2626 42%, #b91c1c 62%, #111827 100%);
+.chase-banner {
+  background: #ffffff;
+  border-bottom: 1px solid #f3f4f6;
 }
 
-.chase-hero::before,
-.chase-hero::after {
-  content: "";
-  position: absolute;
-  border-radius: 999px;
-  pointer-events: none;
+.chase-banner__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.chase-hero::before {
-  width: 420px;
-  height: 420px;
-  right: -120px;
-  top: -90px;
-  background: rgba(250, 204, 21, 0.2);
-  filter: blur(12px);
+.chase-banner__offer-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-.chase-hero::after {
-  width: 360px;
-  height: 360px;
-  left: -140px;
-  bottom: -120px;
-  background: rgba(255, 255, 255, 0.08);
+.chase-banner__offer-scroll::-webkit-scrollbar {
+  display: none;
 }
 
-.chase-hero__mesh {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
-  background-size: 42px 42px;
-  mask-image: linear-gradient(to bottom, black 0%, transparent 92%);
-  opacity: 0.58;
+.chase-banner__offer-card {
+  width: clamp(120px, 32vw, 160px);
+  padding: 10px;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  text-decoration: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-@media (max-width: 768px) {
-  .chase-hero .container {
-    min-height: auto;
+.chase-banner__offer-card:hover {
+  border-color: #99f6e4;
+  box-shadow: 0 8px 24px rgba(13, 148, 136, 0.1);
+}
+
+.chase-banner__offer-image {
+  height: clamp(88px, 22vw, 120px);
+  border-radius: 0.75rem;
+  background: #f3f4f6;
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .chase-banner__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .chase-banner__offer-scroll {
+    flex-wrap: wrap;
+    overflow: visible;
+    justify-content: flex-end;
   }
 }

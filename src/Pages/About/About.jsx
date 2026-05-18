@@ -4,10 +4,10 @@ import TrustUs from "../../Components/CustomersTrust/TrustUs";
 function About() {
   return (
     <>
-      <div className="w-[min(100%,calc(1320px-30px))] mx-auto flex flex-col md:flex-row justify-center p-6 md:p-10 gap-8">
+      <div className="container page-section flex flex-col gap-8 lg:flex-row lg:gap-12">
         <div className="w-full md:w-1/2 p-4 md:p-8 text-center md:text-left">
           <h1 className="text-3xl md:text-4xl font-semibold leading-tight text-slate-900 mb-6">
-            About <span className="text-blue-600">our store</span>
+            About <span className="text-teal-600">our store</span>
           </h1>
           <p className="leading-relaxed text-lg text-slate-600 mb-4">
             We are an online retailer focused on a simple experience: easy browsing, secure checkout,
