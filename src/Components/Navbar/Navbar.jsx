@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { Heart, Menu, Search, ShoppingCart, UserRound, X } from 'lucide-react'
+import { Heart, Search, ShoppingCart, UserRound } from 'lucide-react'
+import MobileMenuDrawer from '../MobileMenuDrawer/MobileMenuDrawer'
+import { useStoreCategories } from '../../hooks/useStoreCategories'
 import './Navbar.css'
 import logo from '../../assets/logo.png'
 import { CartContext } from '../../Context/CartContext'
@@ -13,6 +15,7 @@ function Navbar({ setOpenSearch, isMobile = true }) {
   const [currentUser, setCurrentUser] = useState(null)
   const location = useLocation()
   const isAuthPage = AUTH_PATHS.includes(location.pathname)
+  const { categories } = useStoreCategories()
 
   useEffect(() => {
     try {
@@ -62,19 +65,21 @@ function Navbar({ setOpenSearch, isMobile = true }) {
 
       <div className="nav-main">
         <div className="container nav-header-row">
-          {isMobile && !isAuthPage && (
+          {isMobile && !isAuthPage ? (
             <button
               type="button"
               onClick={() => setShowMenu(true)}
-              className="nav-icon-btn menu-btn-mobile"
+              className="nav-hamburger"
               aria-label="Open menu"
               aria-expanded={showMenu}
             >
-              <Menu className="h-5 w-5" aria-hidden />
+              <span />
+              <span />
+              <span />
             </button>
-          )}
-
-          {isMobile && isAuthPage && <span className="w-11" aria-hidden />}
+          ) : isMobile && isAuthPage ? (
+            <span className="w-11 shrink-0" aria-hidden />
+          ) : null}
 
           <Link to="/" className="logo nav-logo-center" onClick={() => setShowMenu(false)}>
             <span className="logo-ring">
@@ -149,46 +154,13 @@ function Navbar({ setOpenSearch, isMobile = true }) {
         </div>
       </div>
 
-      {isMobile && showMenu && (
-        <>
-          <div
-            className="nav-overlay"
-            onClick={() => setShowMenu(false)}
-            aria-hidden
-          />
-          <nav className="desktop-nav desktop-nav--drawer showMenu" aria-label="Menu">
-            <button
-              type="button"
-              onClick={() => setShowMenu(false)}
-              className="mobile-close"
-              aria-label="Close menu"
-            >
-              <X className="h-5 w-5" aria-hidden />
-            </button>
-            <ul>
-              {navLinks.map(([to, label]) => (
-                <li key={to}>
-                  <NavLink to={to} onClick={() => setShowMenu(false)}>
-                    {label}
-                  </NavLink>
-                </li>
-              ))}
-              <li>
-                {!currentUser ? (
-                  <NavLink to="/login" onClick={() => setShowMenu(false)}>Login / Register</NavLink>
-                ) : (
-                  <NavLink to="/settings" onClick={() => setShowMenu(false)}>Settings</NavLink>
-                )}
-              </li>
-              <li>
-                <NavLink to="/wishlist" onClick={() => setShowMenu(false)}>Wishlist</NavLink>
-              </li>
-              <li>
-                <NavLink to="/cart" onClick={() => setShowMenu(false)}>Cart</NavLink>
-              </li>
-            </ul>
-          </nav>
-        </>
+      {isMobile && (
+        <MobileMenuDrawer
+          open={showMenu}
+          onClose={() => setShowMenu(false)}
+          categories={categories}
+          currentUser={currentUser}
+        />
       )}
     </header>
   )

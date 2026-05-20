@@ -76,62 +76,27 @@
   flex: 1;
 }
 
-#header nav.desktop-nav--drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 50;
-  width: min(86vw, 300px);
-  height: 100vh;
-  height: 100dvh;
-  padding: 72px 20px 20px;
-  background: #ffffff;
-  border-left: 1px solid #e5e7eb;
-  box-shadow: -4px 0 24px rgba(15, 23, 42, 0.12);
-  transform: translateX(100%);
-  visibility: hidden;
-  transition: transform 0.3s ease, visibility 0.3s ease;
-}
-
-#header nav.desktop-nav--drawer.showMenu {
-  transform: translateX(0);
-  visibility: visible;
-}
-
-#header nav.desktop-nav--drawer ul {
+#header .nav-hamburger {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-#header nav.desktop-nav--drawer a {
+  align-items: center;
   justify-content: center;
-  width: 100%;
-  background: #f9fafb;
-}
-
-#header nav.desktop-nav--drawer .mobile-close {
-  position: absolute;
-  left: 16px;
-  top: 16px;
-  display: grid;
-  place-items: center;
-  border: 1px solid #e5e7eb;
-  border-radius: 999px;
-  padding: 10px;
-  background: #ffffff;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background: transparent;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
-#header .nav-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  background: rgba(15, 23, 42, 0.4);
-  backdrop-filter: blur(2px);
+#header .nav-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  border-radius: 1px;
+  background: #111827;
 }
 
 #header .nav-icon-btn,

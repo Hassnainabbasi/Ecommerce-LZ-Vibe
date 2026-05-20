@@ -1,1 +1,17 @@
-/* Home-specific overrides if needed */
+.home-page--splash-active {
+  overflow: hidden;
+  max-height: 100vh;
+}
+
+.home-page:not(.home-page--splash-active) {
+  animation: home-fade-in 0.45s ease-out both;
+}
+
+@keyframes home-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

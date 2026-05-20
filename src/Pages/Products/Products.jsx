@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import CategoryProducts from "../../Components/CategoryProducts/CategoryProducts";
 import ProductToolbar from "../../Components/ProductToolbar/ProductToolbar";
 import { fetchAllProducts } from "../../api";
@@ -10,10 +11,20 @@ function Products() {
   const [error, setError] = useState(null);
   const [gridView, setGridView] = useState('grid');
   const isMobile = useIsMobile();
+  const location = useLocation();
 
   useEffect(() => {
     loadProducts();
   }, []);
+
+  useEffect(() => {
+    if (loading || !location.hash) return;
+    const id = location.hash.replace('#', '');
+    const timer = setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [loading, location.hash, groups.length]);
 
   async function loadProducts() {
     try {

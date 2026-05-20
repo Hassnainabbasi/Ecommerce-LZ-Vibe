@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, BadgePercent } from 'lucide-react'
+import { BadgePercent } from 'lucide-react'
 import { fetchAllProducts } from '../../api'
 import { getProductOffer } from '../../utils/offerHelpers'
 import { getImageUrl } from '../../utils/imageHelper'
@@ -28,35 +28,12 @@ function Banner() {
       .slice(0, 6)
   }, [products])
 
-  return (
-    <section id="banner" className="chase-banner" aria-label="Store highlights">
-      <div className="container py-8 md:py-12 lg:py-14">
-        <div className="chase-banner__inner">
-          <div className="chase-banner__intro text-center lg:text-left">
-            <h1 className="collection-title text-2xl font-semibold text-slate-500 sm:text-3xl lg:text-4xl xl:text-5xl">
-              Shop Quality Products
-              <span className="block font-normal">Online</span>
-            </h1>
-            <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-base lg:mx-0">
-              Clean categories, clear prices, and fast checkout — on every screen size.
-            </p>
-            <div className="mt-5 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-              <Link
-                to="/products"
-                className="inline-flex items-center gap-2 rounded-full bg-teal-600 px-6 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-teal-700"
-              >
-                Browse collection
-                <ArrowRight className="h-4 w-4" aria-hidden />
-              </Link>
-              <a
-                href="#categories"
-                className="inline-flex items-center rounded-full border border-slate-200 bg-white px-6 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-teal-200 hover:text-teal-700"
-              >
-                Categories
-              </a>
-            </div>
-          </div>
+  if (offerProducts.length === 0) return null
 
+  return (
+    <section id="banner" className="chase-banner" aria-label="Live offers">
+      <div className="container py-6 md:py-8">
+        <div className="chase-banner__inner">
           {offerProducts.length > 0 && (
             <div className="chase-banner__offers">
               <div className="mb-3 flex items-center justify-between gap-3">
