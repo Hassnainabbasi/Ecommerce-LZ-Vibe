@@ -1,101 +1,124 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function AdminLogin() {
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
- async function handleLogin(e) {
-  e.preventDefault();
-  const username = e.target.username.value.trim();
-  const password = e.target.password.value.trim();
+  async function handleLogin(e) {
+    e.preventDefault();
+    const emailTrimmed = email.trim();
 
-  if (!username || !password) {
-    return setMessage("Please fill all fields");
-  }
-
-  try {
-    setLoading(true);
-    setMessage("");
-
-    const res = await fetch(`${import.meta.env.VITE_API_BASE}api/admin/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include", // ✅ send cookies
-      body: JSON.stringify({ email: username, password }), // 👈 now matches backend
-    });
-
-    const data = await res.json();
-    console.log("🧩 Login response:", data);
-
-    if (!res.ok) {
-      setMessage(data.error || data.message || "Invalid credentials");
+    if (!emailTrimmed || !password) {
+      toast.error("Please fill all fields");
       return;
     }
 
-    if (data.token) {
-      localStorage.setItem("adminToken", data.token);
+    try {
+      setLoading(true);
+
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}api/admin/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email: emailTrimmed, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.error || data.message || "Invalid credentials");
+        return;
+      }
+
+      if (data.token) {
+        localStorage.setItem("adminToken", data.token);
+      }
+
+      toast.success("Admin login successful");
+      navigate("/admin", { replace: true });
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Server error, please try again later");
+    } finally {
+      setLoading(false);
     }
-
-    navigate("/admin", { replace: true });
-
-  } catch (error) {
-    console.error(error);
-    setMessage("Server error, please try again later");
-  } finally {
-    setLoading(false);
   }
-}
   return (
-    <section className="bg-gradient-to-br from-slate-50 to-slate-100 fixed top-0 left-0 w-full h-screen flex justify-center items-center px-4 py-8 overflow-y-auto">
-      <div className="w-full max-w-md bg-white border-2 border-slate-200 rounded-2xl p-6 sm:p-8 shadow-2xl my-auto">
-        <h1 className="text-2xl sm:text-3xl font-semibold text-center mb-4 sm:mb-6 bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">Admin Login</h1>
-        <p className="text-center text-gray-600 mb-6 sm:mb-8 text-xs sm:text-sm">
-          Enter your credentials to access the admin panel.
+    <div className="auth-page bg-slate-50">
+      <div className="auth-card page-card w-full max-w-md border-slate-200 p-6 sm:p-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-4 sm:mb-6 text-teal-700">
+          Admin Login
+        </h1>
+
+        <p className="text-center text-slate-500 mb-5 sm:mb-6 text-xs sm:text-sm">
+          Sign in to access admin panel
         </p>
 
         <form onSubmit={handleLogin} className="space-y-4 sm:space-y-5">
           <div>
-            <label htmlFor="username" className="block text-gray-700 mb-2 text-xs sm:text-sm font-medium">Email</label>
+            <label
+              htmlFor="email"
+              className="block text-slate-700 mb-2 text-xs sm:text-sm font-medium"
+            >
+              Email Address
+            </label>
             <input
-              type="text"
-              id="username"
-              placeholder="Enter admin email"
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:border-blue-500 transition"
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="admin@example.com"
+              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-gray-700 mb-2 text-xs sm:text-sm font-medium">Password</label>
+            <label
+              htmlFor="password"
+              className="block text-slate-700 mb-2 text-xs sm:text-sm font-medium"
+            >
+              Password
+            </label>
             <input
               type="password"
               id="password"
-              placeholder="Enter password"
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:border-blue-500 transition"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition"
             />
-            {message && <p className="text-xs ps-1 mt-1 text-red-500">{message}</p>}
           </div>
-           <Link to="/" className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 transition block text-right mt-1">Back to Home</Link>
+
+          <div className="flex items-center justify-between">
+            <Link
+              to="/"
+              className="text-xs sm:text-sm text-teal-600 hover:text-teal-700 font-semibold"
+            >
+              Back to Home
+            </Link>
+            <Link
+              to="/login"
+              className="text-xs sm:text-sm text-slate-500 hover:text-slate-700"
+            >
+              Customer login
+            </Link>
+          </div>
+
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all shadow-lg hover:shadow-xl ${
-              loading ? "bg-gray-400 cursor-not-allowed text-white" : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
-            }`}
+            className="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-semibold text-sm sm:text-base transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? (
-              <span className="flex items-center justify-center">
-                <i className="fas fa-spinner fa-spin mr-2"></i>
-                Logging in...
-              </span>
-            ) : (
-              "Login"
-            )}
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>
-    </section>
+    </div>
   );
 }
 

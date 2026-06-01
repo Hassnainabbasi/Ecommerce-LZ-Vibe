@@ -5,7 +5,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
 const Login = () => {
-  const [userType, setUserType] = useState('customer')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -22,47 +21,24 @@ const Login = () => {
     try {
       setLoading(true)
 
-      if (userType === 'customer') {
-        const res = await fetch(`${backendApi}users/login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        })
+      const res = await fetch(`${backendApi}users/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      })
 
-        const data = await res.json()
+      const data = await res.json()
 
-        if (!res.ok) {
-          toast.error(data.message || 'Login failed')
-          return
-        }
-
-        toast.success('Login successful')
-        localStorage.setItem('user', JSON.stringify(data))
-        navigate('/')
-      } else {
-        const res = await fetch(`${backendApi}api/admin/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ email, password }),
-        })
-
-        const data = await res.json()
-
-        if (!res.ok) {
-          toast.error(data.error || data.message || 'Invalid credentials')
-          return
-        }
-
-        if (data.token) {
-          localStorage.setItem('adminToken', data.token)
-        }
-
-        toast.success('Admin login successful')
-        navigate('/admin', { replace: true })
+      if (!res.ok) {
+        toast.error(data.message || 'Login failed')
+        return
       }
+
+      toast.success('Login successful')
+      localStorage.setItem('user', JSON.stringify(data))
+      navigate('/')
     } catch (error) {
       console.error('Login error:', error)
       toast.error('Something went wrong while logging in')
@@ -78,38 +54,8 @@ const Login = () => {
           Welcome Back
         </h1>
 
-        <div className="mb-5 sm:mb-6">
-          <p className="text-center text-slate-600 mb-3 text-xs sm:text-sm font-medium">Login as:</p>
-          <div className="flex gap-2 sm:gap-3 justify-center">
-            <button
-              type="button"
-              onClick={() => setUserType('customer')}
-              className={`flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-full font-semibold text-sm transition-all ${
-                userType === 'customer'
-                  ? 'bg-teal-600 text-white shadow-md'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              }`}
-            >
-              Customer
-            </button>
-            <button
-              type="button"
-              onClick={() => setUserType('worker')}
-              className={`flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-full font-semibold text-sm transition-all ${
-                userType === 'worker'
-                  ? 'bg-teal-600 text-white shadow-md'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              }`}
-            >
-              Worker
-            </button>
-          </div>
-        </div>
-
         <p className="text-center text-slate-500 mb-5 sm:mb-6 text-xs sm:text-sm">
-          {userType === 'customer'
-            ? 'Sign in to continue shopping'
-            : 'Sign in to access admin panel'}
+          Sign in to continue shopping
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
@@ -123,7 +69,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition"
-              placeholder={userType === 'customer' ? 'customer@example.com' : 'admin@example.com'}
+              placeholder="customer@example.com"
             />
           </div>
 
@@ -146,24 +92,16 @@ const Login = () => {
             disabled={loading}
             className="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-semibold text-sm sm:text-base transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Logging in...' : `Login as ${userType === 'customer' ? 'Customer' : 'Worker'}`}
+            {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 
-        {userType === 'customer' && (
-          <p className="text-center text-slate-600 mt-5 sm:mt-6 text-xs sm:text-sm">
-            Don&apos;t have an account?{' '}
-            <Link to="/register" className="text-teal-600 hover:text-teal-700 font-semibold">
-              Register here
-            </Link>
-          </p>
-        )}
-
-        {userType === 'worker' && (
-          <p className="text-center text-slate-600 mt-5 sm:mt-6 text-xs sm:text-sm">
-            Need admin access? Contact your administrator
-          </p>
-        )}
+        <p className="text-center text-slate-600 mt-5 sm:mt-6 text-xs sm:text-sm">
+          Don&apos;t have an account?{' '}
+          <Link to="/register" className="text-teal-600 hover:text-teal-700 font-semibold">
+            Register here
+          </Link>
+        </p>
       </div>
     </div>
   )

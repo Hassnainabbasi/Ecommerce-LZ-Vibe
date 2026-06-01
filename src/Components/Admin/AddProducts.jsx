@@ -93,19 +93,20 @@ export default function AddProducts() {
     offerLabel: "",
     offerEndsAt: "",
     isFeatured: false,
-    image: null,
+    images: [],
   });
   const [loading, setLoading] = useState(false); // ✅ ADD LOADING STATE
   const [bulkImporting, setBulkImporting] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const bulkFileRef = useRef(null);
+  const imageInputRef = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
     if (!token) {
       console.log("No token found, redirect to login");
-      navigate("/admin-login");
+      navigate("/admin/login");
       return;
     }
 
@@ -119,7 +120,7 @@ export default function AddProducts() {
       })
       .catch((err) => {
         console.error("Verification failed:", err.response?.data);
-        navigate("/admin-login");
+        navigate("/admin/login");
       });
 
     // Fetch categories
@@ -168,8 +169,9 @@ export default function AddProducts() {
   };
 
   const handleChange = (e) => {
-    if (e.target.name === "image") {
-      setFormData({ ...formData, image: e.target.files[0] });
+    if (e.target.name === "images") {
+      const files = Array.from(e.target.files || []);
+      setFormData({ ...formData, images: files });
     } else if (e.target.type === "checkbox") {
       setFormData({ ...formData, [e.target.name]: e.target.checked });
     } else {
@@ -189,7 +191,7 @@ export default function AddProducts() {
     const token = localStorage.getItem("adminToken");
     if (!token) {
       toast.error("Admin token missing. Please login again.");
-      navigate("/admin-login");
+      navigate("/admin/login");
       return;
     }
 
@@ -208,15 +210,18 @@ export default function AddProducts() {
       data.append("offerLabel", formData.offerLabel || "");
       data.append("offerEndsAt", formData.offerEndsAt || "");
       data.append("isFeatured", String(formData.isFeatured));
-      if (formData.image) {
-        data.append("image", formData.image);
+      if (Array.isArray(formData.images) && formData.images.length) {
+        // Backend usually supports multiple files via same field name (multer: upload.array("image"))
+        for (const file of formData.images) {
+          data.append("image", file);
+        }
       }
 
       console.log("Sending data:", {
         name: formData.name,
         category: formData.category,
         price: formData.price,
-        hasImage: !!formData.image,
+        imagesCount: formData.images?.length || 0,
       });
 
       const res = await axios.post(
@@ -247,12 +252,11 @@ export default function AddProducts() {
         offerLabel: "",
         offerEndsAt: "",
         isFeatured: false,
-        image: null,
+        images: [],
       });
       
       // ✅ RESET FILE INPUT
-      const fileInput = document.querySelector('input[type="file"]');
-      if (fileInput) fileInput.value = "";
+      if (imageInputRef.current) imageInputRef.current.value = "";
       
     } catch (err) {
       console.error("Error details:", err.response?.data || err.message);
@@ -321,7 +325,7 @@ export default function AddProducts() {
     const token = localStorage.getItem("adminToken");
     if (!token) {
       toast.error("Admin token missing. Please login again.");
-      navigate("/admin-login");
+      navigate("/admin/login");
       return;
     }
 
@@ -641,23 +645,37 @@ export default function AddProducts() {
           {/* Image */}
           <div>
             <label className="block text-sm lg:text-base font-medium mb-2">
-              Product Image
+              Product Images
             </label>
             <input
               type="file"
-              name="image"
+              ref={imageInputRef}
+              name="images"
               onChange={handleChange}
               accept="image/jpeg,image/jpg,image/png,image/webp"
+              multiple
               className="w-full px-3 lg:px-4 py-2 text-sm cursor-pointer lg:text-base bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-red-500 text-gray-800"
             />
-            {formData.image && (
+            {Array.isArray(formData.images) && formData.images.length > 0 && (
               <div className="mt-3">
-                <p className="text-sm text-gray-600 mb-2">Selected: {formData.image.name}</p>
-                <img 
-                  src={URL.createObjectURL(formData.image)} 
-                  alt="Preview" 
-                  className="w-32 h-32 object-cover rounded-lg border-2 border-slate-200"
-                />
+                <p className="text-sm text-gray-600 mb-2">
+                  Selected: {formData.images.length} image(s)
+                </p>
+                <div className="grid grid-cols-3 gap-2">
+                  {formData.images.slice(0, 9).map((file, idx) => (
+                    <img
+                      key={`${file.name}-${idx}`}
+                      src={URL.createObjectURL(file)}
+                      alt={`Preview ${idx + 1}`}
+                      className="w-full aspect-square object-cover rounded-lg border-2 border-slate-200"
+                    />
+                  ))}
+                </div>
+                {formData.images.length > 9 && (
+                  <p className="text-xs text-gray-500 mt-2">
+                    Showing first 9 previews.
+                  </p>
+                )}
               </div>
             )}
           </div>
