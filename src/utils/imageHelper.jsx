@@ -45,5 +45,5 @@ export const getImageUrl = (imagePath) => {
 
   return backendApi + imagePath;
 };
-
+ 
 export default getImageUrl;
