@@ -78,7 +78,7 @@ export default function Categories() {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${API_BASE}api/categories`, {
+      const res = await fetch(`${API_BASE}/api/categories`, {
         credentials: "include",
       });
       const data = await res.json();
@@ -86,7 +86,7 @@ export default function Categories() {
         setCategories(data.categories || []);
       } else {
         // If API doesn't exist, get categories from products
-        const productsRes = await fetch(`${API_BASE}products/getAllProducts`, {
+        const productsRes = await fetch(`${API_BASE}/products/getAllProducts`, {
           credentials: "include",
         });
         const productsData = await productsRes.json();
@@ -111,7 +111,7 @@ export default function Categories() {
     }
 
     try {
-      const res = await fetch(`${API_BASE}api/categories`, {
+      const res = await fetch(`${API_BASE}/api/categories`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -133,7 +133,7 @@ export default function Categories() {
   };
 
   const postCategoriesBulk = async (categoryObjects) => {
-    const res = await fetch(`${API_BASE}api/categories/bulk-import`, {
+    const res = await fetch(`${API_BASE}/api/categories/bulk-import`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -255,7 +255,7 @@ export default function Categories() {
     }
 
     try {
-      const res = await fetch(`${API_BASE}api/categories/${categoryId}`, {
+      const res = await fetch(`${API_BASE}/api/categories/${categoryId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -281,7 +281,7 @@ export default function Categories() {
     if (!window.confirm("Are you sure you want to delete this category?")) return;
 
     try {
-      const res = await fetch(`${API_BASE}api/categories/${categoryId}`, {
+      const res = await fetch(`${API_BASE}/api/categories/${categoryId}`, {
         method: "DELETE",
         credentials: "include",
       });

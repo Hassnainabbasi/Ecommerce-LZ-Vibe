@@ -37,11 +37,16 @@ function AdminProtectedRoute({ children }) {
 
   useEffect(() => {
     async function verifyAdmin() {
+      const token = localStorage.getItem("adminToken");
       try {
-        const res = await fetch(`${backendApi}api/admin/verify`, {
+        const res = await fetch(`${backendApi}/api/admin/verify`, {
           method: "GET",
           credentials: "include",
-        });
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // 2. Header mein bhej diya
+          },
+        }); 
 
         if (res.ok) {
           setIsAdmin(true);
@@ -76,9 +81,13 @@ function AdminLoginRoute() {
   useEffect(() => {
     async function verifyAdmin() {
       try {
-        const res = await fetch(`${backendApi}api/admin/verify`, {
+        const res = await fetch(`${backendApi}/api/admin/verify`, {
           method: "GET",
           credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
         });
 
         if (res.ok) {

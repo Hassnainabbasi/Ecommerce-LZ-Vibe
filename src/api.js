@@ -87,9 +87,9 @@ export const submitContactForm = (formData) => {
 export const fetchDashboardStats = async () => {
   try {
     const [productsRes, usersRes, ordersRes] = await Promise.all([
-      api.get("products/stats/count"),
+      api.get("/products/stats/count"),
       api.get("api/users/stats/count"),
-      api.get("api/orders/stats/count"),
+      api.get("/api/orders/stats/count"),
     ]);
 
     return {

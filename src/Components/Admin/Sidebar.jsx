@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import logo from '../../assets/logo.png';
 
 
 export default function Sidebar() {
@@ -12,7 +13,7 @@ export default function Sidebar() {
   const handleLogout = async () => {
     try {
 
-   await fetch(`${import.meta.env.VITE_API_BASE}api/admin/logout`, {
+   await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/logout`, {
        
 
 
@@ -30,7 +31,7 @@ export default function Sidebar() {
       {/* Mobile Hamburger Button */}
       <button
         onClick={toggleSidebar}
-        className="lg:hidden fixed top-4 left-4 z-50 bg-white border border-slate-200 text-slate-800 p-3 rounded-xl shadow-lg"
+        className="lg:hidden fixed top-4 left-4 z-50 bg-white border border-slate-200 text-red-600 p-3 rounded-xl shadow-lg"
       >
         <i className={`fas ${isSidebarOpen ? 'fa-times' : 'fa-bars'}`}></i>
       </button>
@@ -44,23 +45,27 @@ export default function Sidebar() {
       )}
 
       {/* Sidebar */}
-      <div className={`
-        fixed lg:static inset-y-0 left-0 z-50
-        w-72 bg-white text-slate-800 border-r border-slate-200 transform transition-transform duration-300 ease-in-out shadow-lg
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
+      <div
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-white text-slate-800 border-r border-slate-200 transform transition-transform duration-300 ease-in-out shadow-lg ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+      >
         <div className="p-6 border-b border-white/10">
-          <p className="text-xs font-black uppercase tracking-[0.24em] text-yellow-300">LZ Vibe</p>
-          <h1 className="mt-2 text-2xl font-black">Admin Control</h1>
-          <p className="mt-1 text-sm text-slate-400">Products, offers and orders</p>
+          <div className="flex items-center gap-3">
+            <span className="logo-ring">
+              <img className="h-10 w-10 rounded-full object-cover" src={logo} alt="LZ Vibe" />
+            </span>
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.24em] text-yellow-300">LZ Vibe</p>
+              <h1 className="mt-1 text-lg font-black">Admin Control</h1>
+              <p className="mt-0 text-xs text-slate-400">Products, offers & orders</p>
+            </div>
+          </div>
         </div>
 
         <nav className="mt-6 px-3 space-y-1">
           <Link
             to="/admin"
             onClick={() => setIsSidebarOpen(false)}
-            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
-              }`}
+            className={`flex items-center rounded-full px-4 py-2 text-sm font-bold transition-colors ${location.pathname === '/admin' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-700 hover:bg-slate-50 hover:text-teal-600'}`}
           >
             <i className="fas fa-tachometer-alt w-6 mr-3"></i>
             <span>Dashboard</span>
@@ -69,8 +74,7 @@ export default function Sidebar() {
           <Link
             to="/admin/users"
             onClick={() => setIsSidebarOpen(false)}
-            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/users' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
-              }`}
+            className={`flex items-center rounded-full px-4 py-2 text-sm font-bold transition-colors ${location.pathname === '/admin/users' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-700 hover:bg-slate-50 hover:text-teal-600'}`}
           >
             <i className="fas fa-users w-6 mr-3"></i>
             <span>Users</span>
@@ -79,8 +83,7 @@ export default function Sidebar() {
           <Link
             to="/admin/all-products"
             onClick={() => setIsSidebarOpen(false)}
-            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/all-products' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
-              }`}
+            className={`flex items-center rounded-full px-4 py-2 text-sm font-bold transition-colors ${location.pathname === '/admin/all-products' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-700 hover:bg-slate-50 hover:text-teal-600'}`}
           >
             <i className="fas fa-box w-6 mr-3"></i>
             <span>All Products</span>
@@ -89,8 +92,7 @@ export default function Sidebar() {
           <Link
             to="/admin/add-product"
             onClick={() => setIsSidebarOpen(false)}
-            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/add-product' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
-              }`}
+            className={`flex items-center rounded-full px-4 py-2 text-sm font-bold transition-colors ${location.pathname === '/admin/add-product' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-700 hover:bg-slate-50 hover:text-teal-600'}`}
           >
             <i className="fas fa-plus-circle w-6 mr-3"></i>
             <span>Add Product</span>
@@ -99,8 +101,7 @@ export default function Sidebar() {
           <Link
             to="/admin/categories"
             onClick={() => setIsSidebarOpen(false)}
-            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/categories' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
-              }`}
+            className={`flex items-center rounded-full px-4 py-2 text-sm font-bold transition-colors ${location.pathname === '/admin/categories' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-700 hover:bg-slate-50 hover:text-teal-600'}`}
           >
             <i className="fas fa-tags w-6 mr-3"></i>
             <span>Categories</span>
@@ -109,8 +110,7 @@ export default function Sidebar() {
           <Link
             to="/admin/create-admin"
             onClick={() => setIsSidebarOpen(false)}
-            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/create-admin' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
-              }`}
+            className={`flex items-center rounded-full px-4 py-2 text-sm font-bold transition-colors ${location.pathname === '/admin/create-admin' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-700 hover:bg-slate-50 hover:text-teal-600'}`}
           >
             <i className="fas fa-user-plus w-6 mr-3"></i>
             <span>Create Admin</span>
@@ -119,8 +119,7 @@ export default function Sidebar() {
           <Link
             to="/admin/all-admins"
             onClick={() => setIsSidebarOpen(false)}
-            className={`flex items-center rounded-2xl px-4 py-3 font-bold transition-colors ${location.pathname === '/admin/all-admins' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-300 hover:bg-white/10 hover:text-white'
-              }`}
+            className={`flex items-center rounded-full px-4 py-2 text-sm font-bold transition-colors ${location.pathname === '/admin/all-admins' ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg' : 'text-slate-700 hover:bg-slate-50 hover:text-teal-600'}`}
           >
             <i className="fas fa-users-cog w-6 mr-3"></i>
             <span>All Admins</span>
@@ -131,7 +130,7 @@ export default function Sidebar() {
           <div className="absolute bottom-0 w-72 p-6">
             <button
               onClick={handleLogout}
-              className="w-full rounded-2xl border border-red-400/30 bg-red-500/10 py-3 font-black text-red-100 hover:bg-red-600 transition-colors"
+              className="w-full rounded-full border border-red-400/30 bg-red-500/10 py-2 font-black text-red-100 hover:bg-red-600 transition-colors"
             >
               <i className="fas fa-sign-out-alt mr-2"></i>
               Logout

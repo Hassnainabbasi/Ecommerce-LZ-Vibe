@@ -21,7 +21,7 @@ const Login = () => {
     try {
       setLoading(true)
 
-      const res = await fetch(`${backendApi}users/login`, {
+      const res = await fetch(`${backendApi}/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

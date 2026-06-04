@@ -7,10 +7,7 @@ import * as XLSX from "xlsx";
 const BULK_PRODUCT_CHUNK = 500;
 
 function normProductHeader(k) {
-  return String(k)
-    .toLowerCase()
-    .replace(/\s+/g, "")
-    .replace(/_/g, "");
+  return String(k).toLowerCase().replace(/\s+/g, "").replace(/_/g, "");
 }
 
 function findCellRaw(row, preferredHeaders) {
@@ -29,18 +26,64 @@ function findCellRaw(row, preferredHeaders) {
 
 /** One product row for `POST /products/bulk-import` (Excel / CSV header row). */
 function rowToBulkProduct(row) {
-  const nameRaw = findCellRaw(row, ["name", "product name", "productname", "title"]);
+  const nameRaw = findCellRaw(row, [
+    "name",
+    "product name",
+    "productname",
+    "title",
+  ]);
   const categoryRaw = findCellRaw(row, ["category"]);
   const priceRaw = findCellRaw(row, ["price", "amount"]);
   const weightRaw = findCellRaw(row, ["weight"]);
   const flavorRaw = findCellRaw(row, ["flavor", "flavours", "flavors"]);
+  const sizeRaw = findCellRaw(row, [
+    "size",
+    "sizes",
+    "available size",
+    "available sizes",
+  ]);
+  const colorRaw = findCellRaw(row, [
+    "color",
+    "colors",
+    "available color",
+    "available colors",
+  ]);
+  const stockQtyRaw = findCellRaw(row, [
+    "stockquantity",
+    "stock quantity",
+    "quantity",
+    "qty",
+    "stock",
+    "available stock",
+  ]);
   const imageRaw = findCellRaw(row, ["image", "image url", "imageurl"]);
   const productIdRaw = findCellRaw(row, ["productid", "product id", "sku"]);
-  const compareAtPriceRaw = findCellRaw(row, ["compareatprice", "compare at price", "oldprice", "mrp"]);
-  const discountPercentRaw = findCellRaw(row, ["discountpercent", "discount percent", "discount"]);
-  const isWeeklyOfferRaw = findCellRaw(row, ["isweeklyoffer", "weekly offer", "weeklyoffer"]);
-  const offerLabelRaw = findCellRaw(row, ["offerlabel", "offer label", "badge"]);
-  const offerEndsAtRaw = findCellRaw(row, ["offerendsat", "offer ends at", "valid till"]);
+  const compareAtPriceRaw = findCellRaw(row, [
+    "compareatprice",
+    "compare at price",
+    "oldprice",
+    "mrp",
+  ]);
+  const discountPercentRaw = findCellRaw(row, [
+    "discountpercent",
+    "discount percent",
+    "discount",
+  ]);
+  const isWeeklyOfferRaw = findCellRaw(row, [
+    "isweeklyoffer",
+    "weekly offer",
+    "weeklyoffer",
+  ]);
+  const offerLabelRaw = findCellRaw(row, [
+    "offerlabel",
+    "offer label",
+    "badge",
+  ]);
+  const offerEndsAtRaw = findCellRaw(row, [
+    "offerendsat",
+    "offer ends at",
+    "valid till",
+  ]);
   const isFeaturedRaw = findCellRaw(row, ["isfeatured", "featured"]);
 
   const name = nameRaw != null ? String(nameRaw).trim() : "";
@@ -54,24 +97,66 @@ function rowToBulkProduct(row) {
   const weight = weightRaw != null ? String(weightRaw).trim() : "";
   let flavor = "";
   if (Array.isArray(flavorRaw)) {
-    flavor = flavorRaw.map((x) => String(x).trim()).filter(Boolean).join(", ");
+    flavor = flavorRaw
+      .map((x) => String(x).trim())
+      .filter(Boolean)
+      .join(", ");
   } else if (flavorRaw != null) {
     flavor = String(flavorRaw).trim();
   }
+  let sizes = "";
+  if (Array.isArray(sizeRaw)) {
+    sizes = sizeRaw
+      .map((x) => String(x).trim())
+      .filter(Boolean)
+      .join(", ");
+  } else if (sizeRaw != null) {
+    sizes = String(sizeRaw).trim();
+  }
+  let colors = "";
+  if (Array.isArray(colorRaw)) {
+    colors = colorRaw
+      .map((x) => String(x).trim())
+      .filter(Boolean)
+      .join(", ");
+  } else if (colorRaw != null) {
+    colors = String(colorRaw).trim();
+  }
+  let stockQuantity = 0;
+  if (stockQtyRaw != null && String(stockQtyRaw).trim() !== "") {
+    const asNumber = Number(String(stockQtyRaw).replace(/,/g, ""));
+    stockQuantity = Number.isFinite(asNumber) ? asNumber : 0;
+  }
   const image = imageRaw != null ? String(imageRaw).trim() : "";
   const productId = productIdRaw != null ? String(productIdRaw).trim() : "";
-  const compareAtPrice = parseFloat(String(compareAtPriceRaw ?? "").replace(/,/g, ""));
-  const discountPercent = parseFloat(String(discountPercentRaw ?? "").replace(/,/g, ""));
-  const isTruthy = (value) => ["true", "1", "yes", "y"].includes(String(value ?? "").trim().toLowerCase());
+  const compareAtPrice = parseFloat(
+    String(compareAtPriceRaw ?? "").replace(/,/g, "")
+  );
+  const discountPercent = parseFloat(
+    String(discountPercentRaw ?? "").replace(/,/g, "")
+  );
+  const isTruthy = (value) =>
+    ["true", "1", "yes", "y"].includes(
+      String(value ?? "")
+        .trim()
+        .toLowerCase()
+    );
   const offerLabel = offerLabelRaw != null ? String(offerLabelRaw).trim() : "";
-  const offerEndsAt = offerEndsAtRaw != null ? String(offerEndsAtRaw).trim() : "";
+  const offerEndsAt =
+    offerEndsAtRaw != null ? String(offerEndsAtRaw).trim() : "";
 
   if (!name || !category || !Number.isFinite(price) || price <= 0) return null;
   const p = { name, category, price, weight, flavor };
+  if (sizes) p.sizes = sizes;
+  if (colors) p.colors = colors;
+  if (stockQtyRaw != null && String(stockQtyRaw).trim() !== "")
+    p.stockQuantity = stockQuantity;
   if (image) p.image = image;
   if (productId) p.productId = productId;
-  if (Number.isFinite(compareAtPrice) && compareAtPrice > 0) p.compareAtPrice = compareAtPrice;
-  if (Number.isFinite(discountPercent) && discountPercent > 0) p.discountPercent = discountPercent;
+  if (Number.isFinite(compareAtPrice) && compareAtPrice > 0)
+    p.compareAtPrice = compareAtPrice;
+  if (Number.isFinite(discountPercent) && discountPercent > 0)
+    p.discountPercent = discountPercent;
   if (isWeeklyOfferRaw != null) p.isWeeklyOffer = isTruthy(isWeeklyOfferRaw);
   if (offerLabel) p.offerLabel = offerLabel;
   if (offerEndsAt) p.offerEndsAt = offerEndsAt;
@@ -87,6 +172,9 @@ export default function AddProducts() {
     price: "",
     weight: "",
     flavor: "",
+    sizes: "",
+    colors: "",
+    stockQuantity: "",
     compareAtPrice: "",
     discountPercent: "",
     isWeeklyOffer: false,
@@ -111,15 +199,17 @@ export default function AddProducts() {
     }
 
     axios
-      .get(`${import.meta.env.VITE_API_BASE}api/admin/verify`, {
+      .get(`${import.meta.env.VITE_API_BASE}/api/admin/verify`, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       })
-      .then((res) => {
-        console.log("Admin verified:", res.data);
+      .then(() => {
+        // verification succeeded; keep quiet in production
+        console.debug("Admin verified");
       })
-      .catch((err) => {
-        console.error("Verification failed:", err.response?.data);
+      .catch(() => {
+        // show a single user-facing message and redirect to login
+        toast.error("Admin verification failed — please login.");
         navigate("/admin/login");
       });
 
@@ -131,38 +221,52 @@ export default function AddProducts() {
     try {
       setLoadingCategories(true);
       const API_BASE = import.meta.env.VITE_API_BASE;
-      
+
       // Try to fetch from categories API
       try {
-        const res = await fetch(`${API_BASE}api/categories`, {
+        const res = await fetch(`${API_BASE}/api/categories`, {
           credentials: "include",
         });
         const data = await res.json();
         if (data.success && data.categories && data.categories.length > 0) {
-          setCategories(data.categories.map(cat => cat.name || cat));
+          setCategories(data.categories.map((cat) => cat.name || cat));
           setLoadingCategories(false);
           return;
         }
-      } catch (err) {
-        console.log("Categories API not available, fetching from products");
+      } catch {
+        // the categories API is optional; fallback will use products list
+        console.debug("Categories API not available, fetching from products");
       }
 
       // Fallback: Get categories from products
-      const productsRes = await fetch(`${API_BASE}products/getAllProducts`, {
+      const productsRes = await fetch(`${API_BASE}/products/getAllProducts`, {
         credentials: "include",
       });
       const productsData = await productsRes.json();
       if (productsData.success && productsData.products) {
-        const uniqueCategories = [...new Set(productsData.products.map(p => p.category).filter(Boolean))];
+        const uniqueCategories = [
+          ...new Set(
+            productsData.products.map((p) => p.category).filter(Boolean)
+          ),
+        ];
         setCategories(uniqueCategories.sort());
       } else if (Array.isArray(productsData)) {
-        const uniqueCategories = [...new Set(productsData.map(p => p.category).filter(Boolean))];
+        const uniqueCategories = [
+          ...new Set(productsData.map((p) => p.category).filter(Boolean)),
+        ];
         setCategories(uniqueCategories.sort());
       }
     } catch (err) {
       console.error("Failed to fetch categories", err);
       // Set default categories as fallback
-      setCategories(["protein", "creatine", "preworkout", "weightgainer", "vitamins and minerals", "amino acid"]);
+      setCategories([
+        "protein",
+        "creatine",
+        "preworkout",
+        "weightgainer",
+        "vitamins and minerals",
+        "amino acid",
+      ]);
     } finally {
       setLoadingCategories(false);
     }
@@ -181,7 +285,7 @@ export default function AddProducts() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // ✅ VALIDATION
     if (!formData.name || !formData.category || !formData.price) {
       toast.error("Name, Category, and Price are required!");
@@ -206,6 +310,9 @@ export default function AddProducts() {
       // data.append("flavor", formData.flavor || "");
       data.append("compareAtPrice", formData.compareAtPrice || "");
       data.append("discountPercent", formData.discountPercent || "");
+      data.append("sizes", formData.sizes || "");
+      data.append("colors", formData.colors || "");
+      data.append("stockQuantity", formData.stockQuantity || "0");
       data.append("isWeeklyOffer", String(formData.isWeeklyOffer));
       data.append("offerLabel", formData.offerLabel || "");
       data.append("offerEndsAt", formData.offerEndsAt || "");
@@ -225,7 +332,7 @@ export default function AddProducts() {
       });
 
       const res = await axios.post(
-        `${import.meta.env.VITE_API_BASE}products`,
+        `${import.meta.env.VITE_API_BASE}/products`,
         data,
         {
           headers: {
@@ -238,7 +345,7 @@ export default function AddProducts() {
 
       console.log("Response:", res.data);
       toast.success("Product added successfully!");
-      
+
       // ✅ RESET FORM
       setFormData({
         name: "",
@@ -254,13 +361,15 @@ export default function AddProducts() {
         isFeatured: false,
         images: [],
       });
-      
+
       // ✅ RESET FILE INPUT
       if (imageInputRef.current) imageInputRef.current.value = "";
-      
     } catch (err) {
       console.error("Error details:", err.response?.data || err.message);
-      const errorMsg = err.response?.data?.error || err.response?.data?.message || "Error adding product";
+      const errorMsg =
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        "Error adding product";
       toast.error(errorMsg);
     } finally {
       setLoading(false); // ✅ STOP LOADING
@@ -274,12 +383,13 @@ export default function AddProducts() {
       "price",
       "compareAtPrice",
       "discountPercent",
+      "sizes",
+      "colors",
+      "stockQuantity",
       "isWeeklyOffer",
       "offerLabel",
       "offerEndsAt",
       "isFeatured",
-      // "weight",
-      // "flavor",
       "image",
     ];
     const example = [
@@ -288,12 +398,13 @@ export default function AddProducts() {
       5499,
       6999,
       21,
+      "S, M, L",
+      "Black, White",
+      32,
       "yes",
       "Weekly Offer",
       "2026-06-01",
       "yes",
-      // "2 kg",
-      // "chocolate, vanilla",
       "",
     ];
     const ws = XLSX.utils.aoa_to_sheet([header, example]);
@@ -304,17 +415,20 @@ export default function AddProducts() {
       { wch: 16 },
       { wch: 16 },
       { wch: 14 },
+      { wch: 16 },
+      { wch: 12 },
+      { wch: 14 },
       { wch: 18 },
       { wch: 14 },
       { wch: 12 },
       { wch: 10 },
-      { wch: 22 },
-      { wch: 28 },
     ];
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Products");
     XLSX.writeFile(wb, "products-bulk-import-template.xlsx");
-    toast.success("Template downloaded. Row 1 = headers; category must exist in admin categories.");
+    toast.success(
+      "Template downloaded. Row 1 = headers; category must exist in admin categories."
+    );
   };
 
   const handleBulkProductsFile = async (e) => {
@@ -363,7 +477,7 @@ export default function AddProducts() {
       for (let i = 0; i < products.length; i += BULK_PRODUCT_CHUNK) {
         const chunk = products.slice(i, i + BULK_PRODUCT_CHUNK);
         const res = await axios.post(
-          `${API_BASE}products/bulk-import`,
+          `${API_BASE}/products/bulk-import`,
           { products: chunk },
           {
             headers: {
@@ -392,7 +506,9 @@ export default function AddProducts() {
         }
       }
 
-      const skipMsg = skippedRows ? `${skippedRows} invalid row(s) skipped in file.` : "";
+      const skipMsg = skippedRows
+        ? `${skippedRows} invalid row(s) skipped in file.`
+        : "";
       if (!inserted && errors) {
         toast.error(
           `No products saved. ${errors} API error(s). ${skipMsg}`.trim()
@@ -410,7 +526,10 @@ export default function AddProducts() {
         console.info("Sample API errors:", errorSamples);
       }
     } catch (err) {
-      console.error("Bulk product import failed:", err.response?.data || err.message);
+      console.error(
+        "Bulk product import failed:",
+        err.response?.data || err.message
+      );
       const msg =
         err.response?.data?.message ||
         err.response?.data?.error ||
@@ -425,12 +544,15 @@ export default function AddProducts() {
   return (
     <div className="p-4 lg:p-6">
       <div className="mb-6 rounded-[2rem] bg-gradient-to-r from-slate-950 via-red-900 to-red-600 p-6 text-white shadow-2xl">
-        <p className="text-xs font-black uppercase tracking-[0.24em] text-yellow-300">Catalogue control</p>
+        <p className="text-xs font-black uppercase tracking-[0.24em] text-yellow-300">
+          Catalogue control
+        </p>
         <h1 className="mt-2 text-3xl lg:text-4xl font-black tracking-tight">
           Add New Product
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-white/70">
-          Add product data, real offers, weekly deal flags, and bulk imports from one place.
+          Add product data, real offers, weekly deal flags, and bulk imports
+          from one place.
         </p>
       </div>
       <div className="bg-white border border-slate-200 rounded-[2rem] p-4 lg:p-6 text-gray-800 shadow-sm max-w-3xl mx-auto">
@@ -471,10 +593,14 @@ export default function AddProducts() {
                 <option value="">Select Category</option>
                 {categories.length > 0 ? (
                   categories.map((category, index) => {
-                    const categoryName = typeof category === 'string' ? category : (category.name || category);
+                    const categoryName =
+                      typeof category === "string"
+                        ? category
+                        : category.name || category;
                     return (
                       <option key={index} value={categoryName}>
-                        {categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}
+                        {categoryName.charAt(0).toUpperCase() +
+                          categoryName.slice(1)}
                       </option>
                     );
                   })
@@ -484,7 +610,9 @@ export default function AddProducts() {
                     <option value="creatine">Creatine</option>
                     <option value="preworkout">Pre Workout</option>
                     <option value="weightgainer">Weight Gainer</option>
-                    <option value="vitamins and minerals">Vitamin and Minerals</option>
+                    <option value="vitamins and minerals">
+                      Vitamin and Minerals
+                    </option>
                     <option value="amino acid">Amino Acid</option>
                   </>
                 )}
@@ -497,7 +625,7 @@ export default function AddProducts() {
             )}
           </div>
 
-          {/* Price & Weight */}
+          {/* Price */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm lg:text-base font-medium mb-2">
@@ -515,19 +643,50 @@ export default function AddProducts() {
                 placeholder="Enter price"
               />
             </div>
-            {/* <div>
+            <div>
               <label className="block text-sm lg:text-base font-medium mb-2">
-                Weight
+                Stock Quantity
+              </label>
+              <input
+                type="number"
+                name="stockQuantity"
+                value={formData.stockQuantity}
+                onChange={handleChange}
+                min="0"
+                step="1"
+                className="w-full px-3 lg:px-4 py-2 text-sm lg:text-base bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-red-500 text-gray-800"
+                placeholder="Total stock available"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm lg:text-base font-medium mb-2">
+                Available Sizes
               </label>
               <input
                 type="text"
-                name="weight"
-                value={formData.weight}
+                name="sizes"
+                value={formData.sizes}
                 onChange={handleChange}
                 className="w-full px-3 lg:px-4 py-2 text-sm lg:text-base bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-red-500 text-gray-800"
-                placeholder="e.g., 2kg, 500g"
+                placeholder="e.g., S, M, L"
               />
-            </div> */}
+            </div>
+            <div>
+              <label className="block text-sm lg:text-base font-medium mb-2">
+                Available Colors
+              </label>
+              <input
+                type="text"
+                name="colors"
+                value={formData.colors}
+                onChange={handleChange}
+                className="w-full px-3 lg:px-4 py-2 text-sm lg:text-base bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-red-500 text-gray-800"
+                placeholder="e.g., Black, White"
+              />
+            </div>
           </div>
 
           {/* Flavor */}
@@ -555,7 +714,8 @@ export default function AddProducts() {
                 Deal, discount and featured settings
               </h2>
               <p className="mt-1 text-sm text-slate-600">
-                Ye fields backend product mein save hon to frontend cards aur hero par real offers show honge.
+                Ye fields backend product mein save hon to frontend cards aur
+                hero par real offers show honge.
               </p>
             </div>
 
@@ -700,9 +860,9 @@ export default function AddProducts() {
             </p>
           </div> */}
           <div className="flex flex-wrap gap-2 shrink-0">
-            <button 
+            <button
               type="button"
-              onClick={downloadProductsBulkTemplate}  
+              onClick={downloadProductsBulkTemplate}
               disabled={bulkImporting}
               className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-800 text-sm font-semibold disabled:opacity-50"
             >
@@ -749,3 +909,4 @@ export default function AddProducts() {
     </div>
   );
 }
+  
